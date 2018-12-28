@@ -1,0 +1,47 @@
+\begin{thebibliography}{1}
+
+\bibitem{JONES20021}
+D.~Jones, S.~Mirrazavi, and M.~Tamiz, ``Multi-objective meta-heuristics: An
+  overview of the current state-of-the-art,'' {\em European Journal of
+  Operational Research}, vol.~137, no.~1, pp.~1 -- 9, 2002.
+
+\bibitem{bektas2006multiple}
+T.~Bektas, ``The multiple traveling salesman problem: an overview of
+  formulations and solution procedures,'' {\em Omega}, vol.~34, no.~3,
+  pp.~209--219, 2006.
+
+\bibitem{bell2009survey}
+J.~Bell and B.~Stevens, ``A survey of known results and research areas for
+  n-queens,'' {\em Discrete Mathematics}, vol.~309, no.~1, pp.~1--31, 2009.
+
+\bibitem{Laporte2010}
+G.~Laporte, ``A concise guide to the traveling salesman problem,'' {\em Journal
+  of the Operational Research Society}, vol.~61, pp.~35--40, Jan 2010.
+
+\bibitem{Masehian2013}
+E.~Masehian, H.~Akbaripour, and N.~Mohabbati-Kalejahi, ``Landscape analysis and
+  efficient metaheuristics for solving the n-queens problem,'' {\em
+  Computational Optimization and Applications}, vol.~56, pp.~735--764, Dec
+  2013.
+
+\bibitem{li2010efficient}
+C.~M. Li and Z.~Quan, ``An efficient branch-and-bound algorithm based on maxsat
+  for the maximum clique problem.,'' in {\em AAAI}, vol.~10, pp.~128--133,
+  2010.
+
+\bibitem{trevisan2012khot}
+L.~Trevisan, ``On khot's unique games conjecture.,'' {\em Bulletin (New Series)
+  of the American Mathematical Society}, vol.~49, no.~1, 2012.
+
+\bibitem{barto2012absorbing}
+L.~Barto and M.~Kozik, ``Absorbing subalgebras, cyclic terms, and the
+  constraint satisfaction problem,'' {\em arXiv preprint arXiv:1201.0557},
+  2012.
+
+\bibitem{garrido2000heuristic}
+A.~Garrido, M.~A. Salido, F.~Barber, and M.~L{\'o}pez, ``Heuristic methods for
+  solving job-shop scheduling problems,'' in {\em Proc. ECAI-2000 Workshop on
+  New Results in Planning, Scheduling and Design (PuK2000)}, pp.~44--49,
+  Citeseer, 2000.
+
+\end{thebibliography}
