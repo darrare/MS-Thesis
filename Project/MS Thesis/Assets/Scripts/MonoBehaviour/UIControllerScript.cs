@@ -7,6 +7,6 @@ public class UIControllerScript : MonoBehaviour
 {
     public void Lattice2DButtonClicked()
     {
-        new LatticeGraph2D<ColoredNode>(9, 9);
+        new LatticeGraph2D<ColoredNode>(100, 100);
     }
 }
