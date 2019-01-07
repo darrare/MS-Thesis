@@ -17,4 +17,10 @@ namespace Assets.Scripts.Graph
     /// False: The constraint has not, and/or cannot be met
     /// </returns>
     public delegate bool Constraint<T>(T a, T b);
+
+    /// <summary>
+    /// Will be declared on every graph delcaration. 
+    /// Provides instruction on how to call list of constraints from specific problem.
+    /// </summary>
+    public delegate bool CheckSatisfiability<T>(Node<T> node) where T : INodeifiable<T>, new();
 }
