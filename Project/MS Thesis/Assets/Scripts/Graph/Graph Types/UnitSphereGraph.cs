@@ -61,8 +61,8 @@ namespace Assets.Scripts.Graph
                         {
                             if (!c(e[0].Obj, e[1].Obj))
                             {
-                                e.Line.GetComponent<LineRenderer>().startColor = Color.magenta;
-                                e.Line.GetComponent<LineRenderer>().endColor = Color.magenta;
+                                e.Line.GetComponent<LineRenderer>().startColor = Color.yellow;
+                                e.Line.GetComponent<LineRenderer>().endColor = Color.yellow;
                                 isValid = false;
                             }
                             else

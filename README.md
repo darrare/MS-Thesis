@@ -4,6 +4,11 @@ https://giant.gfycat.com/RespectfulGrouchyAmericanwigeon.webm
 Generating a 50 node 3D graph with 20% density.
 https://giant.gfycat.com/BaggyHealthyBoto.webm
 
+Added satisfaction testing and node coloring. (first gif is because my gif recorder recognizes magenta as transparent so it screws it up!)
+https://gfycat.com/AlienatedCarelessGrison
+https://gfycat.com/ValidAcrobaticAnemone
+
+
 Next steps:
 1. Create an alternate mode that doesn't actually create the gameobjects. This way we should be able to generate graphs of size 1000x1000 or better without issues.
 2. Create other types of graphs: 3D lattice, complete, perhaps directed?!??!
