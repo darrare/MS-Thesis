@@ -22,6 +22,11 @@ namespace Assets.Scripts.Graph
         public List<Edge<T>> Edges { get; set; } = new List<Edge<T>>();
 
         /// <summary>
+        /// Delegate to check if the node has been satisfied
+        /// </summary>
+        public CheckSatisfiability<T> IsSatisfied;
+
+        /// <summary>
         /// Constructor for a node object
         /// </summary>
         /// <param name="obj">The object this node will contain</param>
@@ -39,7 +44,7 @@ namespace Assets.Scripts.Graph
         /// </returns>
         public bool CheckSatisfiability()
         {
-            return true;
+            return IsSatisfied(this);
         }
 
         /// <summary>

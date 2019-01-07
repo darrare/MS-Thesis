@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Graph
 {
-    public class LatticeGraph2D<T> where T : INodeifiable<T>, new()
+    public class LatticeGraph2D<T> : GraphClass where T : INodeifiable<T>, new()
     {
         /// <summary>
         /// Collection of nodes in this graph
@@ -93,6 +93,16 @@ namespace Assets.Scripts.Graph
         void SetConstraints()
         {
 
+        }
+
+        public override bool CheckSatisfiability()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void Deconstruct()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
