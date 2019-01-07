@@ -34,5 +34,17 @@ namespace Assets.Scripts.Graph
             Line = GameObject.Instantiate(ResourceManager.Instance.RuntimePrefabs[RuntimePrefab.Line], GameManager.Instance.LineParent.transform);
             Line.GetComponent<LineRenderer>().SetPositions(new Vector3[] { a.Position, b.Position });
         }
+
+        /// <summary>
+        /// indexer for edge class
+        /// </summary>
+        /// <param name="index">index</param>
+        /// <returns>node</returns>
+        public Node<T> this[int index]
+        {
+            get { return Nodes[index]; }
+            set { Nodes[index] = value; }
+        }
+
     }
 }
