@@ -77,7 +77,7 @@ namespace Assets.Scripts.Graph
             {
                 do
                 {
-                    int x = Random.Range(0, NumNodes - 1), y = Random.Range(0, NumNodes - 1);
+                    int x = Random.Range(0, NumNodes), y = Random.Range(0, NumNodes);
                     if (edgeMatrix[x,y] == 1)
                     {
                         edgeMatrix[x, y] = 0;
