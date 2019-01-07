@@ -14,7 +14,7 @@ namespace Assets.Scripts.Graph
         /// <summary>
         /// List of Constraint delegates used to determine satisfiability
         /// </summary>
-        public List<Constraint<ColoredNode>> Constraints { get; set; }
+        public List<Constraint<ColoredNode>> Constraints { get; set; } = new List<Constraint<ColoredNode>>();
 
         /// <summary>
         /// Constructor for a Colored Node
