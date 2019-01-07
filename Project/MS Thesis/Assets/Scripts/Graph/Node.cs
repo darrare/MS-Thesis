@@ -48,7 +48,9 @@ namespace Assets.Scripts.Graph
         /// <param name="neighbor">The neighbor to connect to via an edge</param>
         public void AddNeighbor(Node<T> neighbor)
         {
-            Edges.Add(new Edge<T>(this, neighbor));
+            Edge<T> newEdge = new Edge<T>(this, neighbor);
+            Edges.Add(newEdge);
+            neighbor.Edges.Add(newEdge);
         }
     }
 }
