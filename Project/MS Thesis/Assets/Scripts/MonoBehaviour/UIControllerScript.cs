@@ -22,7 +22,7 @@ public class UIControllerScript : MonoBehaviour
     {
         try
         {
-            new UnitSphereGraph<ColoredNode>(int.Parse(unitSphereNumNodes.text), float.Parse(unitSpherePercentDensity.text));
+            new UnitSphereGraph<ColoredNode>(int.Parse(unitSphereNumNodes.text), float.Parse(unitSpherePercentDensity.text) / 100);
         }
         catch (Exception e)
         {
