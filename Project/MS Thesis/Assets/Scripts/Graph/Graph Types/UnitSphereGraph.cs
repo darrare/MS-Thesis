@@ -55,9 +55,9 @@ namespace Assets.Scripts.Graph
                 Nodes[Nodes.Count - 1].IsSatisfied = new CheckSatisfiability<T>((a) => 
                 {
                     bool isValid = true;
-                    foreach(Constraint<T> c in a.Obj.Constraints)
+                    foreach (Constraint<T> c in a.Obj.Constraints)
                     {
-                        foreach(Edge<T> e in a.Edges)
+                        foreach (Edge<T> e in a.Edges)
                         {
                             if (!c(e[0].Obj, e[1].Obj))
                             {

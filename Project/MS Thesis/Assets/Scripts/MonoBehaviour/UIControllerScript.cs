@@ -26,7 +26,7 @@ public class UIControllerScript : MonoBehaviour
     {
         if (graph != null)
             graph.Deconstruct();
-        graph = new UnitSphereGraph<ColoredNode>(int.Parse(unitSphereNumNodes.text), float.Parse(unitSpherePercentDensity.text) / 100);       
+        graph = new UnitSphereGraph<ColoredNode>(int.Parse(unitSphereNumNodes.text), float.Parse(unitSpherePercentDensity.text) / 100);  
     }
 
     public void CheckSatisfiability()
