@@ -36,6 +36,15 @@ namespace Assets.Scripts.Graph
         }
 
         /// <summary>
+        /// Deep copy constructor
+        /// </summary>
+        /// <param name="node">node to copy</param>
+        public Node(Node<T> node)
+        {
+
+        }
+
+        /// <summary>
         /// Checks to see if this node's constraints have been satisfied
         /// </summary>
         /// <returns>

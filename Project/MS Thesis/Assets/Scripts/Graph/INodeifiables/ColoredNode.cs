@@ -17,6 +17,11 @@ namespace Assets.Scripts.Graph
         public List<Constraint<ColoredNode>> Constraints { get; set; } = new List<Constraint<ColoredNode>>();
 
         /// <summary>
+        /// Color of the given node
+        /// </summary>
+        public Color Color { get; set; } = Color.white;
+
+        /// <summary>
         /// Constructor for a Colored Node
         /// </summary>
         public ColoredNode() { }

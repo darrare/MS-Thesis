@@ -8,10 +8,10 @@ using System;
 public class UIControllerScript : MonoBehaviour
 {
     [SerializeField]
-    InputField unitSphereNumNodes;
+    InputField numNodesInput;
 
     [SerializeField]
-    InputField unitSpherePercentDensity;
+    InputField percentDensityInput;
 
     GraphClass graph;
 
@@ -26,11 +26,18 @@ public class UIControllerScript : MonoBehaviour
     {
         if (graph != null)
             graph.Deconstruct();
-        graph = new UnitSphereGraph<ColoredNode>(int.Parse(unitSphereNumNodes.text), float.Parse(unitSpherePercentDensity.text) / 100);  
+        graph = new UnitSphereGraph<ColoredNode>(int.Parse(numNodesInput.text), float.Parse(percentDensityInput.text) / 100);  
     }
 
     public void CheckSatisfiability()
     {
         bool somethingReturned = graph.CheckSatisfiability();
+    }
+
+    public void RandalBrownGraphButtonClicked()
+    {
+        if (graph != null)
+            graph.Deconstruct();
+        graph = new RandallBrownGraph(int.Parse(numNodesInput.text), float.Parse(percentDensityInput.text) / 100);
     }
 }
