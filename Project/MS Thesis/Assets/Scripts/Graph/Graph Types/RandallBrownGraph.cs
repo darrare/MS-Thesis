@@ -29,8 +29,8 @@ namespace Assets.Scripts.Graph
             Denseness = denseness;
             CreateGraph();
             SetNeighbors();
-
-            RandallBrownColoringAlgorithm(new List<Color>() { Color.red, Color.blue, Color.yellow});
+            List<Color> colors = new List<Color>() { Color.red, Color.blue, Color.green, Color.yellow, Color.magenta, Color.black, Color.grey, Color.cyan };
+            RandallBrownColoringAlgorithm(colors.Take(int.Parse(UIControllerScript.Instance.numColorsInput.text)).ToList());
         }
 
         public void RandallBrownColoringAlgorithm(List<Color> colors)
@@ -44,33 +44,58 @@ namespace Assets.Scripts.Graph
                 ColorState current = queue.Dequeue();
                 if (!current.Any(t => t.Color == Color.white))
                 {
-                    current.ApplyColorState();
-                    if (CheckSatisfiability())
-                        validSolutions.Add(current);
+                    foreach (NodeColorPair v in current)
+                    {
+                        v.Node.Obj.Color = v.Color;
+                    }
+                    foreach (NodeColorPair v in current)
+                    {
+                        if (!v.Node.CheckSatisfiability())
+                            continue;
+                    }
+                    validSolutions.Add(current);
+                    if (UIControllerScript.Instance.stopOnFirstSolution.isOn)
+                    {
+                        break;
+                    }
                     continue;
                 }
 
-                NodeColorPair nextWhite = current.FirstOrDefault(t => t.Color == Color.white);
+                NodeColorPair nextWhite = current.First(t => t.Color == Color.white);
                 foreach (Color c in colors)
                 {
                     nextWhite.Color = c;
-                    current.ApplyColorState();
+                    foreach(NodeColorPair v in current)
+                    {
+                        v.Node.Obj.Color = v.Color;
+                    }
                     if (nextWhite.Node.CheckSatisfiability())
-                        queue.Enqueue(new ColorState(current), 1); //TODO: HEURISTIC HERE
+                        queue.Enqueue(new ColorState(current), current.Where(t => t.Color == Color.white).Count()); //TODO: HEURISTIC HERE
                 }
             }
 
             //do something to color tree?
-            Nodes = validSolutions[0].Select(t => t.Node).ToList();
-            DrawColors();
-            CheckSatisfiability();
+            if (validSolutions.Count > 0)
+            {
+                foreach (NodeColorPair v in validSolutions[0])
+                {
+                    v.Node.Obj.Color = v.Color;
+                }
+                DrawColors();
+                CheckSatisfiability();
+                UIControllerScript.Instance.ValidSolutions = validSolutions;
+            }
+            else
+            {
+                Debug.Log("NO VALID SOLUTIONS");
+            }
         }
 
         void DrawColors()
         {
             foreach (Node<ColoredNode> n in Nodes)
             {
-                n.Obj.GameObject.GetComponent<MeshRenderer>().material.color = n.Obj.Color;
+                n.Obj.ApplyColorToGameObject();
             }
         }
 

@@ -5,10 +5,17 @@ using System;
 
 namespace Assets.Scripts.Graph
 {
-    public struct NodeColorPair
+    public class NodeColorPair
     {
         public Node<ColoredNode> Node;
         public Color Color;
+
+        public NodeColorPair() { }
+        public NodeColorPair(NodeColorPair other)
+        {
+            Node = other.Node;
+            Color = new Color(other.Color.r, other.Color.g, other.Color.b, 1);
+        }
     }
 
     public class ColorState : IEnumerable<NodeColorPair>
@@ -25,14 +32,17 @@ namespace Assets.Scripts.Graph
 
         public ColorState(ColorState other)
         {
-            State = other.State;
+            foreach(NodeColorPair p in other.State)
+            {
+                State.Add(new NodeColorPair(p));
+            }
         }
 
         public void ApplyColorState()
         {
             foreach (NodeColorPair v in State)
             {
-                v.Node.Obj.Color = v.Color;
+                v.Node.Obj.ApplyColorToGameObject();
             }
         }
 

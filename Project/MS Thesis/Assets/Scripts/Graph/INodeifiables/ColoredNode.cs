@@ -19,7 +19,12 @@ namespace Assets.Scripts.Graph
         /// <summary>
         /// Color of the given node
         /// </summary>
-        public Color Color { get; set; } = Color.white;
+        public Color Color { get; set; }
+
+        public void ApplyColorToGameObject()
+        {
+            GameObject.GetComponent<MeshRenderer>().material.color = Color;
+        }
 
         /// <summary>
         /// Constructor for a Colored Node

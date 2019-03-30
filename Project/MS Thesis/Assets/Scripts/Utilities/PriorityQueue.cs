@@ -23,7 +23,7 @@ public class PriorityQueue<T> : IEnumerable<T>
         {
             int midPoint = lowerBound + (upperBound - lowerBound) / 2;
 
-            if (upperBound - lowerBound == 1)
+            if (upperBound - lowerBound <= 2)
                 return upperBound;
 
             float pr = queue[midPoint].Item2;
