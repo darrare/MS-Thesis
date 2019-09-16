@@ -113,6 +113,20 @@ namespace GeneticAlgorithm
         }
 
         /// <summary>
+        /// Gets a list of all fitnesses
+        /// </summary>
+        /// <returns>All fitnesses combined with the step to generate the graph</returns>
+        public List<double> GetFitnesses()
+        {
+            double min = Chromosomes.Min(t => t.FitnessScore);
+            double max = Chromosomes.Max(t => t.FitnessScore);
+            if (min == max)
+                return new List<double>() { max };
+            //return Chromosomes.Select(t => (t.FitnessScore - min) / (max - min)).ToList();
+            return Chromosomes.Select(t => t.FitnessScore).Distinct().ToList();
+        }
+
+        /// <summary>
         /// Often considered the "Selection" part of the algorithm.
         /// Picks the strongest to survive.
         /// </summary>

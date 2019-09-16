@@ -8,9 +8,9 @@ namespace GeneticAlgorithm
 {
     public delegate double FitnessAlgorithm(object[] genes);
 
-    public static class GeneticAlgorithmClass 
+    public static class GeneticAlgorithmClass
     {
-        public static Action<int, double, int, double> UpdateProgressBar { get; set; }
+        public static Action<int, double, int, double, Tuple<int, List<double>>> UpdateProgressBar { get; set; }
 
         /// <summary>
         /// Runs the genetic algorithm using the given parameters to solve for a list of Chromosomes that satisfy the problem
@@ -36,11 +36,11 @@ namespace GeneticAlgorithm
             int populationSize,
             double maxConvergenceDeviationToAccept,
             object[] defaultGenes,
-            double chanceToSelectEachChromosome, 
-            double chanceToMutateEachGene, 
-            double maxGeneMutationDeviation, 
+            double chanceToSelectEachChromosome,
+            double chanceToMutateEachGene,
+            double maxGeneMutationDeviation,
             FitnessAlgorithm fitnessAlgorithm,
-            int maxIterationCount, 
+            int maxIterationCount,
             int seed = 0)
         {
             //Creates a new population, automatically mutates each gene by up to maxGeneMutationDeviation
@@ -52,18 +52,22 @@ namespace GeneticAlgorithm
             for (i = 0; i < maxIterationCount; i++)
             {
                 pop.CalculateFitness(fitnessAlgorithm);
-                averageFitness = pop.CalculateAverageFitness();
                 if ((convergence = pop.CalculateConvergence()) <= maxConvergenceDeviationToAccept)
                 {
-                    UpdateProgressBar?.Invoke((int)(((double)i / (double)maxIterationCount) * 100), convergence, i, averageFitness);
+                    averageFitness = pop.CalculateAverageFitness();
+                    UpdateProgressBar?.Invoke((int)(((double)i / (double)maxIterationCount) * 100), convergence, i, averageFitness, new Tuple<int, List<double>>(i, new List<double>()));
                     break;
                 }
+
+                if (i % 5 == 0)
+                {
+                    averageFitness = pop.CalculateAverageFitness();
+                    UpdateProgressBar?.Invoke((int)(((double)i / (double)maxIterationCount) * 100), convergence, i, averageFitness, new Tuple<int, List<double>>(i, pop.GetFitnesses()));
+                }
+
                 pop.RemoveUnworthy();
                 pop.MatePopulation();
                 pop.Mutate(chanceToSelectEachChromosome, chanceToMutateEachGene, maxGeneMutationDeviation);
-
-                if (i % 5 == 0)
-                    UpdateProgressBar?.Invoke((int)(((double)i / (double)maxIterationCount) * 100), convergence, i, averageFitness);
             }
             return pop.Chromosomes.OrderByDescending(t => t.FitnessScore).ToList();
         }

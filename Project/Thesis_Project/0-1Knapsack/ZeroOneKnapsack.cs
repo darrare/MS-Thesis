@@ -162,7 +162,8 @@ namespace _0_1Knapsack
             Btn_RunAlgorithm.Enabled = false;
 
             List<Tuple<int, double, double>> dataPoints = new List<Tuple<int, double, double>>();
-            GeneticAlgorithm.GeneticAlgorithmClass.UpdateProgressBar = (percent, convergence, iteration, averageFitness) =>
+            List<Tuple<int, List<double>>> selectedChromosomesFitness = new List<Tuple<int, List<double>>>();
+            GeneticAlgorithm.GeneticAlgorithmClass.UpdateProgressBar = (percent, convergence, iteration, averageFitness, selectedFitness) =>
             {
                 PB_Knapsack.Invoke((MethodInvoker)delegate ()
                {
@@ -170,6 +171,7 @@ namespace _0_1Knapsack
                    LBL_Convergence.Text = convergence.ToString();
                    LBL_Iteration.Text = iteration.ToString();
                    dataPoints.Add(new Tuple<int, double, double>(iteration, convergence, averageFitness));
+                   selectedChromosomesFitness.Add(selectedFitness);
                });
             };
 
@@ -193,7 +195,7 @@ namespace _0_1Knapsack
             //handle chromosomes in results data grid view
             GenerateResultsDataGridView(knapsack.GetKnapsackSolutionsFromGenes(chromosomes.Select(t => t.Genes).ToList()), knapsack.Items.ToList());
             ResultsForm form = new ResultsForm();
-            form.InitializeChart(dataPoints.Select(t => t.Item1).ToList(), dataPoints.Select(t => t.Item2).ToList(), dataPoints.Select(t => t.Item3).ToList());
+            form.InitializeChart(dataPoints.Select(t => t.Item1).ToList(), dataPoints.Select(t => t.Item2).ToList(), dataPoints.Select(t => t.Item3).ToList(), selectedChromosomesFitness);
             form.Show();
         }
 
