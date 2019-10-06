@@ -66,10 +66,10 @@ namespace _0_1Knapsack
             //Use heuristic to sort array such that most wanted items are at the beginning
             List<KnapsackItem> inBag = new List<KnapsackItem>();
             foreach (KnapsackItem item in Items.OrderByDescending(item =>
-                (MaximumWeight - item.Weight) * Convert.ToSingle(genes[0]) +
-                item.Weight * Convert.ToSingle(genes[1]) +
-                (MaximumValue - item.Value) * Convert.ToSingle(genes[2]) +
-                item.Value * Convert.ToSingle(genes[3])))
+                (MaximumWeight - item.Weight) * Convert.ToDouble(genes[0]) +
+                item.Weight * Convert.ToDouble(genes[1]) +
+                (MaximumValue - item.Value) * Convert.ToDouble(genes[2]) +
+                item.Value * Convert.ToDouble(genes[3])))
             {
                 if (inBag.Sum(t => t.Weight) + item.Weight < Capacity)
                 {
@@ -79,6 +79,10 @@ namespace _0_1Knapsack
             return inBag.Sum(t => t.Value);
         }
 
+        /// <summary>
+        /// Generates a list of all solutions based on the converged generation
+        /// </summary>
+        /// <param name="genes">The converged genes</param>
         public List<KnapsackSolution> GetKnapsackSolutionsFromGenes(List<object[]> genes)
         {
             List<KnapsackSolution> solutions = new List<KnapsackSolution>();
@@ -86,10 +90,10 @@ namespace _0_1Knapsack
             {
                 List<KnapsackItem> inBag = new List<KnapsackItem>();
                 foreach (KnapsackItem item in Items.OrderByDescending(item =>
-                    (MaximumWeight - item.Weight) * Convert.ToSingle(geneSet[0]) +
-                    item.Weight * Convert.ToSingle(geneSet[1]) +
-                    (MaximumValue - item.Value) * Convert.ToSingle(geneSet[2]) +
-                    item.Value * Convert.ToSingle(geneSet[3])
+                    (MaximumWeight - item.Weight) * Convert.ToDouble(geneSet[0]) +
+                    item.Weight * Convert.ToDouble(geneSet[1]) +
+                    (MaximumValue - item.Value) * Convert.ToDouble(geneSet[2]) +
+                    item.Value * Convert.ToDouble(geneSet[3])
                     ))
                 {
                     if (inBag.Sum(t => t.Weight) + item.Weight < Capacity)

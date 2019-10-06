@@ -54,7 +54,7 @@ namespace GeneticAlgorithm
                     //Mutate gene based on type.
                     if (newGenes[j] is double)
                     {
-                        double val = Convert.ToSingle(newGenes[j]);
+                        double val = Convert.ToDouble(newGenes[j]);
                         newGenes[j] = val + val * ((Rand.NextDouble() * 2) - 1) * maxDerivation;
                     }
                     else if (newGenes[j] is int)
@@ -201,7 +201,7 @@ namespace GeneticAlgorithm
                             //Mutate gene based on type.
                             if (c.Genes[i] is double)
                             {
-                                double val = Convert.ToSingle(c.Genes[i]);
+                                double val = Convert.ToDouble(c.Genes[i]);
                                 c.Genes[i] = val + val * ((Rand.NextDouble() * 2) - 1) * mutationPercentageMax;
                             }
                             else if (c.Genes[i] is int)

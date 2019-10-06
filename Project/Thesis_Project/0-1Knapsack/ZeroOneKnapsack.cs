@@ -306,11 +306,12 @@ namespace _0_1Knapsack
 
             for (int i = 0; i < solutions.Count; i++)
             {
+                double[] normalizedGenes = solutions[i].Genes.Select(t => (double)t / (double)solutions[i].Genes.Max()).ToArray();
                 table.Rows.Add(new object[] { i,
-                    ((double)solutions[i].Genes[0]).ToString("#.###"),
-                    ((double)solutions[i].Genes[1]).ToString("#.###"),
-                    ((double)solutions[i].Genes[2]).ToString("#.###"),
-                    ((double)solutions[i].Genes[3]).ToString("#.###"),
+                    normalizedGenes[0].ToString("#.###"),
+                    normalizedGenes[1].ToString("#.###"),
+                    normalizedGenes[2].ToString("#.###"),
+                    normalizedGenes[3].ToString("#.###"),
                     solutions[i].TotalWeight.ToString("#.###"),
                     solutions[i].TotalValue.ToString("#.###"),
                     (solutions[i].TotalValue / solutions[i].TotalWeight).ToString("#.###"),
@@ -323,6 +324,19 @@ namespace _0_1Knapsack
             {
                 DGV_Results.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
             }
+        }
+
+        private void Btn_CompareHeuristicsAgainstGreedyAlgorithm_Click(object sender, EventArgs e)
+        {
+            if (DGV_Results.DataSource == null || DGV_KnapsackObjects.DataSource == null)
+            {
+                MessageBox.Show("Must have results and knapsack objects generated prior to compare.", "Error", MessageBoxButtons.OK);
+                return;
+            }
+
+            CompareAgainstGreedy form = new CompareAgainstGreedy();
+            form.Show();
+            form.InstantiateWithExistingData((DataTable)DGV_Results.DataSource, (DataTable)DGV_KnapsackObjects.DataSource, int.Parse(TxtBx_NumberKnapsackObjects.Text));
         }
     }
 }

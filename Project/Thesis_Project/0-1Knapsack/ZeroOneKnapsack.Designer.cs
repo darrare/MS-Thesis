@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.TxtBx_NumberKnapsackObjects = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.TxtBx_MaximumValue = new System.Windows.Forms.TextBox();
             this.TxtBx_MinimumValue = new System.Windows.Forms.TextBox();
@@ -41,8 +43,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.Btn_RandomizeParameters = new System.Windows.Forms.Button();
             this.Btn_RunAlgorithm = new System.Windows.Forms.Button();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.DGV_Results = new System.Windows.Forms.DataGridView();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.TxtBx_Seed = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -60,8 +60,6 @@
             this.labelpopsize = new System.Windows.Forms.Label();
             this.TxtBx_Convergence = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.TxtBx_NumberKnapsackObjects = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.DGV_KnapsackObjects = new System.Windows.Forms.DataGridView();
             this.PB_Knapsack = new System.Windows.Forms.ProgressBar();
@@ -69,12 +67,17 @@
             this.label14 = new System.Windows.Forms.Label();
             this.LBL_Convergence = new System.Windows.Forms.Label();
             this.LBL_Iteration = new System.Windows.Forms.Label();
+            this.Btn_CompareHeuristicsAgainstGreedyAlgorithm = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.DGV_Results = new System.Windows.Forms.DataGridView();
             this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DGV_Results)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DGV_KnapsackObjects)).BeginInit();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DGV_Results)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -97,6 +100,22 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Knapsack Parameters";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(109, 16);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(104, 13);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "# Knapsack Objects";
+            // 
+            // TxtBx_NumberKnapsackObjects
+            // 
+            this.TxtBx_NumberKnapsackObjects.Location = new System.Drawing.Point(112, 32);
+            this.TxtBx_NumberKnapsackObjects.Name = "TxtBx_NumberKnapsackObjects";
+            this.TxtBx_NumberKnapsackObjects.Size = new System.Drawing.Size(100, 20);
+            this.TxtBx_NumberKnapsackObjects.TabIndex = 10;
             // 
             // label4
             // 
@@ -197,24 +216,6 @@
             this.Btn_RunAlgorithm.Text = "Run Algorithm";
             this.Btn_RunAlgorithm.UseVisualStyleBackColor = true;
             this.Btn_RunAlgorithm.Click += new System.EventHandler(this.Btn_RunAlgorithm_Click);
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.DGV_Results);
-            this.groupBox2.Location = new System.Drawing.Point(12, 205);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(889, 357);
-            this.groupBox2.TabIndex = 3;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Results";
-            // 
-            // DGV_Results
-            // 
-            this.DGV_Results.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DGV_Results.Location = new System.Drawing.Point(6, 19);
-            this.DGV_Results.Name = "DGV_Results";
-            this.DGV_Results.Size = new System.Drawing.Size(877, 332);
-            this.DGV_Results.TabIndex = 0;
             // 
             // groupBox3
             // 
@@ -369,22 +370,6 @@
             this.label8.TabIndex = 14;
             this.label8.Text = "Convergence";
             // 
-            // TxtBx_NumberKnapsackObjects
-            // 
-            this.TxtBx_NumberKnapsackObjects.Location = new System.Drawing.Point(112, 32);
-            this.TxtBx_NumberKnapsackObjects.Name = "TxtBx_NumberKnapsackObjects";
-            this.TxtBx_NumberKnapsackObjects.Size = new System.Drawing.Size(100, 20);
-            this.TxtBx_NumberKnapsackObjects.TabIndex = 10;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(109, 16);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(104, 13);
-            this.label6.TabIndex = 11;
-            this.label6.Text = "# Knapsack Objects";
-            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.DGV_KnapsackObjects);
@@ -446,11 +431,48 @@
             this.LBL_Iteration.TabIndex = 10;
             this.LBL_Iteration.Text = "0";
             // 
+            // Btn_CompareHeuristicsAgainstGreedyAlgorithm
+            // 
+            this.Btn_CompareHeuristicsAgainstGreedyAlgorithm.Location = new System.Drawing.Point(622, 596);
+            this.Btn_CompareHeuristicsAgainstGreedyAlgorithm.Name = "Btn_CompareHeuristicsAgainstGreedyAlgorithm";
+            this.Btn_CompareHeuristicsAgainstGreedyAlgorithm.Size = new System.Drawing.Size(279, 27);
+            this.Btn_CompareHeuristicsAgainstGreedyAlgorithm.TabIndex = 11;
+            this.Btn_CompareHeuristicsAgainstGreedyAlgorithm.Text = "Compare Heuristics Against Greedy Algorithm";
+            this.Btn_CompareHeuristicsAgainstGreedyAlgorithm.UseVisualStyleBackColor = true;
+            this.Btn_CompareHeuristicsAgainstGreedyAlgorithm.Click += new System.EventHandler(this.Btn_CompareHeuristicsAgainstGreedyAlgorithm_Click);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.DGV_Results);
+            this.groupBox2.Location = new System.Drawing.Point(12, 205);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(889, 357);
+            this.groupBox2.TabIndex = 3;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Results";
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(6, 19);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(877, 332);
+            this.dataGridView1.TabIndex = 0;
+            // 
+            // DGV_Results
+            // 
+            this.DGV_Results.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DGV_Results.Location = new System.Drawing.Point(6, 19);
+            this.DGV_Results.Name = "DGV_Results";
+            this.DGV_Results.Size = new System.Drawing.Size(877, 332);
+            this.DGV_Results.TabIndex = 0;
+            // 
             // ZeroOneKnapsack
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(913, 635);
+            this.Controls.Add(this.Btn_CompareHeuristicsAgainstGreedyAlgorithm);
             this.Controls.Add(this.LBL_Iteration);
             this.Controls.Add(this.LBL_Convergence);
             this.Controls.Add(this.label14);
@@ -466,12 +488,13 @@
             this.Text = "0-1 Knapsack";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.DGV_Results)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.DGV_KnapsackObjects)).EndInit();
+            this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DGV_Results)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -492,8 +515,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button Btn_RandomizeParameters;
         private System.Windows.Forms.Button Btn_RunAlgorithm;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.DataGridView DGV_Results;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.TextBox TxtBx_DefaultGeneValue;
         private System.Windows.Forms.TextBox TxtBx_PopulationSize;
@@ -520,6 +541,10 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label LBL_Convergence;
         private System.Windows.Forms.Label LBL_Iteration;
+        private System.Windows.Forms.Button Btn_CompareHeuristicsAgainstGreedyAlgorithm;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.DataGridView DGV_Results;
+        private System.Windows.Forms.DataGridView dataGridView1;
     }
 }
 

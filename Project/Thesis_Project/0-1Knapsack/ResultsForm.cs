@@ -26,11 +26,11 @@ namespace _0_1Knapsack
             Chart_Results.ChartAreas[0].AxisX.Interval = 5;
             Chart_Results.ChartAreas[0].AxisY.Minimum = 0;
             Chart_Results.ChartAreas[0].AxisY.Maximum = 1;
-            Chart_Results.Series[0].Points.DataBindXY(iterations, convergences);
+            Chart_Results.Series[0].Points.DataBindXY(iterations, convergences.Select(t => 1 - t).ToList());
 
-            Chart_Results.Series.Add("Average Fitness");
-            Chart_Results.Series[1].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            Chart_Results.Series[1].Points.DataBindXY(iterations, averageFitnesses);
+            //Chart_Results.Series.Add("Average Fitness");
+            //Chart_Results.Series[1].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            //Chart_Results.Series[1].Points.DataBindXY(iterations, averageFitnesses);
 
             Chart_FitnessScores.Series[0].LegendText = "Selected Chromosomes Fitness";
             Chart_FitnessScores.Series[0]["IsXAxisQuantitative"] = "true";

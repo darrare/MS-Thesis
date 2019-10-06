@@ -29,10 +29,8 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.Chart_Results = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.Chart_FitnessScores = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -44,12 +42,9 @@
             // 
             chartArea1.Name = "ChartArea1";
             this.Chart_Results.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.Chart_Results.Legends.Add(legend1);
             this.Chart_Results.Location = new System.Drawing.Point(13, 13);
             this.Chart_Results.Name = "Chart_Results";
             series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.Chart_Results.Series.Add(series1);
             this.Chart_Results.Size = new System.Drawing.Size(775, 328);
@@ -60,12 +55,9 @@
             // 
             chartArea2.Name = "ChartArea1";
             this.Chart_FitnessScores.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.Chart_FitnessScores.Legends.Add(legend2);
             this.Chart_FitnessScores.Location = new System.Drawing.Point(13, 347);
             this.Chart_FitnessScores.Name = "Chart_FitnessScores";
             series2.ChartArea = "ChartArea1";
-            series2.Legend = "Legend1";
             series2.Name = "Series1";
             this.Chart_FitnessScores.Series.Add(series2);
             this.Chart_FitnessScores.Size = new System.Drawing.Size(775, 328);
