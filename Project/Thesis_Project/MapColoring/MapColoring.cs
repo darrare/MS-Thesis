@@ -25,7 +25,7 @@ namespace MapColoring
             toolTips = new Dictionary<Control, string>()
             {
                 { TxtBx_NumCountries, "The number of countries to generate" },
-                { TxtBx_EdgeDensity, "The percentage of connections between countries. .5 = each country is neighbors to roughly 1/2 all countries. 1 = every country is connected to every other country. " },
+                { TxtBx_EdgeDensity, "The percentage of connections between countries. "+ Environment.NewLine+".5 = each country is neighbors to roughly 1/2 all countries. "+ Environment.NewLine+"1 = every country is connected to every other country."+ Environment.NewLine+"This is overruled by min and max edge requirements."  },
                 { TxtBx_MaxEdgesPerCountry, "Maximum amount of edges a country can have." },
                 { TxtBx_MinEdgesPerCountry, "Minimum amount of edges a country can have. Must be less than Num Countries" },
                 { TxtBx_PopulationSize , "Must be in the form of Size = X + Y where x = y(y-1)/2) where y is the number of chromosomes kept each iteration to breed." + Environment.NewLine + "Some valid values: 36, 136, 528, 2080" },
@@ -82,6 +82,36 @@ namespace MapColoring
         }
 
         /// <summary>
+        /// Logic of the algorithm
+        /// </summary>
+        private void RunAlgorithm()
+        {
+            Graph graph = new Graph(int.Parse(TxtBx_NumCountries.Text), double.Parse(TxtBx_EdgeDensity.Text),
+                int.Parse(TxtBx_MinEdgesPerCountry.Text), int.Parse(TxtBx_MaxEdgesPerCountry.Text),
+                PictureBox_Graph.Width, PictureBox_Graph.Height, rand);
+            DrawGraph(graph);
+        }
+
+        private void DrawGraph(Graph graph)
+        {
+            Pen pen = new Pen(Color.Black);
+            Bitmap image = new Bitmap(PictureBox_Graph.Width, PictureBox_Graph.Height);
+            Graphics g = Graphics.FromImage(image);
+
+            foreach (var edge in graph.Nodes.SelectMany(t => t.Neighbors).Distinct())
+            {
+                g.DrawLine(pen, edge.Nodes[0].X, edge.Nodes[0].Y, edge.Nodes[1].X, edge.Nodes[1].Y);
+            }
+
+            foreach (var node in graph.Nodes)
+            {
+                g.DrawEllipse(pen, node.X - 10, node.Y - 10, 20, 20); //TODO: Make the width and height scale based on image size and numnodes
+            }
+
+            PictureBox_Graph.Image = image;
+        }
+
+        /// <summary>
         /// The randomize parameters button has been clicked.
         /// Randomize the values of the parameter fields
         /// </summary>
@@ -128,6 +158,8 @@ namespace MapColoring
                 sw.WriteLine(TxtBx_PercentGenesMutated.Text);
                 sw.WriteLine(TxtBx_PercentMutationDeviation.Text);
             }
+
+            RunAlgorithm();
         }
 
         private bool IsParameterError()

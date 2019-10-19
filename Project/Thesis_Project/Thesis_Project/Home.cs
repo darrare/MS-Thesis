@@ -22,5 +22,11 @@ namespace Thesis_Project
             _0_1Knapsack.ZeroOneKnapsack form = new _0_1Knapsack.ZeroOneKnapsack();
             form.Show();
         }
+
+        private void Btn_GraphColoring_Click(object sender, EventArgs e)
+        {
+            MapColoring.MapColoring form = new MapColoring.MapColoring();
+            form.Show();
+        }
     }
 }

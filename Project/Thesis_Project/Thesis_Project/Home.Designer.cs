@@ -92,6 +92,7 @@
             this.Btn_GraphColoring.TabIndex = 5;
             this.Btn_GraphColoring.Text = "Graph Coloring";
             this.Btn_GraphColoring.UseVisualStyleBackColor = true;
+            this.Btn_GraphColoring.Click += new System.EventHandler(this.Btn_GraphColoring_Click);
             // 
             // Btn_Settings
             // 

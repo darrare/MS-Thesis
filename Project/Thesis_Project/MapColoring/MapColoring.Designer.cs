@@ -56,8 +56,10 @@
             this.label14 = new System.Windows.Forms.Label();
             this.Btn_RunAlgorithm = new System.Windows.Forms.Button();
             this.Btn_RandomizeParameters = new System.Windows.Forms.Button();
+            this.PictureBox_Graph = new System.Windows.Forms.PictureBox();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PictureBox_Graph)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox3
@@ -314,11 +316,21 @@
             this.Btn_RandomizeParameters.UseVisualStyleBackColor = true;
             this.Btn_RandomizeParameters.Click += new System.EventHandler(this.Btn_RandomizeParameters_Click);
             // 
+            // PictureBox_Graph
+            // 
+            this.PictureBox_Graph.BackColor = System.Drawing.Color.White;
+            this.PictureBox_Graph.Location = new System.Drawing.Point(485, 13);
+            this.PictureBox_Graph.Name = "PictureBox_Graph";
+            this.PictureBox_Graph.Size = new System.Drawing.Size(531, 420);
+            this.PictureBox_Graph.TabIndex = 31;
+            this.PictureBox_Graph.TabStop = false;
+            // 
             // MapColoring
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(712, 444);
+            this.ClientSize = new System.Drawing.Size(1028, 444);
+            this.Controls.Add(this.PictureBox_Graph);
             this.Controls.Add(this.Btn_RunAlgorithm);
             this.Controls.Add(this.Btn_RandomizeParameters);
             this.Controls.Add(this.groupBox1);
@@ -329,6 +341,7 @@
             this.groupBox3.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PictureBox_Graph)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -363,6 +376,7 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Button Btn_RunAlgorithm;
         private System.Windows.Forms.Button Btn_RandomizeParameters;
+        private System.Windows.Forms.PictureBox PictureBox_Graph;
     }
 }
 

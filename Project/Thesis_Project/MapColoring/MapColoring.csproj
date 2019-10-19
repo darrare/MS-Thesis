@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Graph.cs" />
     <Compile Include="MapColoring.cs">
       <SubType>Form</SubType>
     </Compile>

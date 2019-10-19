@@ -84,6 +84,10 @@
       <Project>{da339df2-fb20-4089-8367-046293ee01d3}</Project>
       <Name>0-1Knapsack</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MapColoring\MapColoring.csproj">
+      <Project>{901bb3f6-dab8-4f0b-b9de-b83e2138a2e2}</Project>
+      <Name>MapColoring</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
