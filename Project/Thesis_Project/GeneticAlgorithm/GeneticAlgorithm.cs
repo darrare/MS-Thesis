@@ -30,7 +30,6 @@ namespace GeneticAlgorithm
         /// <para/>1 means the mutation will range from 0-double whatever the genes value was</param>
         /// <param name="fitnessAlgorithm">The algorithm provided by the CSP to determine the success of the chromosome</param>
         /// <param name="maxIterationCount">Maximum number of evolutions. Prevents algorithm from running forever when fitness scores won't converge. Default is infinite</param>
-        /// <param name="seed">(OPTIONAL) Seed for randomization to get same results</param>
         /// <returns>List of chromosomes that was the last set before a convergence was found, ordered from highest to lowest</returns>
         public static List<Chromosome> RunGeneticAlgorithm(
             int populationSize,
@@ -40,8 +39,7 @@ namespace GeneticAlgorithm
             double chanceToMutateEachGene,
             double maxGeneMutationDeviation,
             FitnessAlgorithm fitnessAlgorithm,
-            int maxIterationCount,
-            int seed = 0)
+            int maxIterationCount)
         {
             //Creates a new population, automatically mutates each gene by up to maxGeneMutationDeviation
             Population pop = new Population(populationSize, defaultGenes, maxGeneMutationDeviation);

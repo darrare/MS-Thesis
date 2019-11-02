@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace _0_1Knapsack
 {
-    public partial class ResultsForm : Form
+    public partial class FormResults : Form
     {
-        public ResultsForm()
+        public FormResults()
         {
             InitializeComponent();
         }

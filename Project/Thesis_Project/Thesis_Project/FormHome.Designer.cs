@@ -1,6 +1,6 @@
 ﻿namespace Thesis_Project
 {
-    partial class Home
+    partial class FormHome
     {
         /// <summary>
         /// Required designer variable.

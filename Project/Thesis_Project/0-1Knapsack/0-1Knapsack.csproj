@@ -47,35 +47,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompareAgainstGreedy.cs">
+    <Compile Include="FormCompareAgainstGreedy.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CompareAgainstGreedy.Designer.cs">
-      <DependentUpon>CompareAgainstGreedy.cs</DependentUpon>
+    <Compile Include="FormCompareAgainstGreedy.Designer.cs">
+      <DependentUpon>FormCompareAgainstGreedy.cs</DependentUpon>
     </Compile>
     <Compile Include="Knapsack.cs" />
-    <Compile Include="ResultsForm.cs">
+    <Compile Include="FormResults.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ResultsForm.Designer.cs">
-      <DependentUpon>ResultsForm.cs</DependentUpon>
+    <Compile Include="FormResults.Designer.cs">
+      <DependentUpon>FormResults.cs</DependentUpon>
     </Compile>
-    <Compile Include="ZeroOneKnapsack.cs">
+    <Compile Include="FormZeroOneKnapsack.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ZeroOneKnapsack.Designer.cs">
-      <DependentUpon>ZeroOneKnapsack.cs</DependentUpon>
+    <Compile Include="FormZeroOneKnapsack.Designer.cs">
+      <DependentUpon>FormZeroOneKnapsack.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="CompareAgainstGreedy.resx">
-      <DependentUpon>CompareAgainstGreedy.cs</DependentUpon>
+    <EmbeddedResource Include="FormCompareAgainstGreedy.resx">
+      <DependentUpon>FormCompareAgainstGreedy.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ResultsForm.resx">
-      <DependentUpon>ResultsForm.cs</DependentUpon>
+    <EmbeddedResource Include="FormResults.resx">
+      <DependentUpon>FormResults.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ZeroOneKnapsack.resx">
-      <DependentUpon>ZeroOneKnapsack.cs</DependentUpon>
+    <EmbeddedResource Include="FormZeroOneKnapsack.resx">
+      <DependentUpon>FormZeroOneKnapsack.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

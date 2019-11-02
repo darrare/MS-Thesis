@@ -10,13 +10,13 @@ using System.Windows.Forms;
 
 namespace _0_1Knapsack
 {
-    public partial class CompareAgainstGreedy : Form
+    public partial class FormCompareAgainstGreedy : Form
     {
 
         List<KnapsackItem> items;
         int capacity;
 
-        public CompareAgainstGreedy()
+        public FormCompareAgainstGreedy()
         {
             InitializeComponent();
         }

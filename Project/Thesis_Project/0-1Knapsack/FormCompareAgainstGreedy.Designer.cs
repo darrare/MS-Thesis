@@ -1,6 +1,6 @@
 ﻿namespace _0_1Knapsack
 {
-    partial class CompareAgainstGreedy
+    partial class FormCompareAgainstGreedy
     {
         /// <summary>
         /// Required designer variable.

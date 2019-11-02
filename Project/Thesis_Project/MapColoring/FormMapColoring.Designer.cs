@@ -1,6 +1,6 @@
 ﻿namespace MapColoring
 {
-    partial class MapColoring
+    partial class FormMapColoring
     {
         /// <summary>
         /// Required designer variable.
@@ -54,9 +54,10 @@
             this.label11 = new System.Windows.Forms.Label();
             this.TxtBx_EdgeDensity = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.Btn_RunAlgorithm = new System.Windows.Forms.Button();
+            this.Btn_GenerateGraph = new System.Windows.Forms.Button();
             this.Btn_RandomizeParameters = new System.Windows.Forms.Button();
             this.PictureBox_Graph = new System.Windows.Forms.PictureBox();
+            this.Btn_RunAlgorithm = new System.Windows.Forms.Button();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox_Graph)).BeginInit();
@@ -218,6 +219,7 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.TxtBx_MinEdgesPerCountry);
+            this.groupBox1.Controls.Add(this.Btn_GenerateGraph);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.TxtBx_MaxEdgesPerCountry);
             this.groupBox1.Controls.Add(this.TxtBx_NumCountries);
@@ -296,15 +298,15 @@
             this.label14.TabIndex = 14;
             this.label14.Text = "Edge Density";
             // 
-            // Btn_RunAlgorithm
+            // Btn_GenerateGraph
             // 
-            this.Btn_RunAlgorithm.Location = new System.Drawing.Point(373, 156);
-            this.Btn_RunAlgorithm.Name = "Btn_RunAlgorithm";
-            this.Btn_RunAlgorithm.Size = new System.Drawing.Size(106, 43);
-            this.Btn_RunAlgorithm.TabIndex = 30;
-            this.Btn_RunAlgorithm.Text = "Run Algorithm";
-            this.Btn_RunAlgorithm.UseVisualStyleBackColor = true;
-            this.Btn_RunAlgorithm.Click += new System.EventHandler(this.Btn_RunAlgorithm_Click);
+            this.Btn_GenerateGraph.Location = new System.Drawing.Point(112, 97);
+            this.Btn_GenerateGraph.Name = "Btn_GenerateGraph";
+            this.Btn_GenerateGraph.Size = new System.Drawing.Size(100, 33);
+            this.Btn_GenerateGraph.TabIndex = 30;
+            this.Btn_GenerateGraph.Text = "Generate Graph";
+            this.Btn_GenerateGraph.UseVisualStyleBackColor = true;
+            this.Btn_GenerateGraph.Click += new System.EventHandler(this.Btn_GenerateGraph_Click);
             // 
             // Btn_RandomizeParameters
             // 
@@ -325,13 +327,23 @@
             this.PictureBox_Graph.TabIndex = 31;
             this.PictureBox_Graph.TabStop = false;
             // 
+            // Btn_RunAlgorithm
+            // 
+            this.Btn_RunAlgorithm.Location = new System.Drawing.Point(373, 156);
+            this.Btn_RunAlgorithm.Name = "Btn_RunAlgorithm";
+            this.Btn_RunAlgorithm.Size = new System.Drawing.Size(106, 43);
+            this.Btn_RunAlgorithm.TabIndex = 32;
+            this.Btn_RunAlgorithm.Text = "Run Algorithm";
+            this.Btn_RunAlgorithm.UseVisualStyleBackColor = true;
+            this.Btn_RunAlgorithm.Click += new System.EventHandler(this.Btn_RunAlgorithm_Click);
+            // 
             // MapColoring
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1028, 444);
-            this.Controls.Add(this.PictureBox_Graph);
             this.Controls.Add(this.Btn_RunAlgorithm);
+            this.Controls.Add(this.PictureBox_Graph);
             this.Controls.Add(this.Btn_RandomizeParameters);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox3);
@@ -374,9 +386,10 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox TxtBx_EdgeDensity;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Button Btn_RunAlgorithm;
+        private System.Windows.Forms.Button Btn_GenerateGraph;
         private System.Windows.Forms.Button Btn_RandomizeParameters;
         private System.Windows.Forms.PictureBox PictureBox_Graph;
+        private System.Windows.Forms.Button Btn_RunAlgorithm;
     }
 }
 

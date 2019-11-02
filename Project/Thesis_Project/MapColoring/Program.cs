@@ -16,7 +16,7 @@ namespace MapColoring
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MapColoring());
+            Application.Run(new FormMapColoring());
         }
     }
 }

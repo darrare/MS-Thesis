@@ -1,6 +1,6 @@
 ﻿namespace _0_1Knapsack
 {
-    partial class ZeroOneKnapsack
+    partial class FormZeroOneKnapsack
     {
         /// <summary>
         /// Required designer variable.

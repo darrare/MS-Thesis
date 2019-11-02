@@ -16,7 +16,7 @@ namespace _0_1Knapsack
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ZeroOneKnapsack());
+            Application.Run(new FormZeroOneKnapsack());
         }
     }
 }

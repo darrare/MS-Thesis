@@ -48,16 +48,17 @@
   <ItemGroup>
     <Compile Include="Extensions.cs" />
     <Compile Include="Graph.cs" />
-    <Compile Include="MapColoring.cs">
+    <Compile Include="FormMapColoring.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MapColoring.Designer.cs">
-      <DependentUpon>MapColoring.cs</DependentUpon>
+    <Compile Include="FormMapColoring.Designer.cs">
+      <DependentUpon>FormMapColoring.cs</DependentUpon>
     </Compile>
+    <Compile Include="MapColoring.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="MapColoring.resx">
-      <DependentUpon>MapColoring.cs</DependentUpon>
+    <EmbeddedResource Include="FormMapColoring.resx">
+      <DependentUpon>FormMapColoring.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -1,6 +1,6 @@
 ﻿namespace _0_1Knapsack
 {
-    partial class ResultsForm
+    partial class FormResults
     {
         /// <summary>
         /// Required designer variable.

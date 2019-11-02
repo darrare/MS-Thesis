@@ -12,6 +12,35 @@ namespace MapColoring
         public List<Node> Nodes { get; set; } = new List<Node>();
         const double UNCOMFORTABLE_DISTANCE_IN_PERCENTAGE = .05; //within 5% distance compared to top left to bottom right of image
 
+        /// <summary>
+        /// Deep copy constructor for a graph
+        /// </summary>
+        /// <param name="other">The graph to copy</param>
+        public Graph(Graph other)
+        {
+            //Copy nodes over
+            for (int i = 0; i < other.Nodes.Count; i++)
+            {
+                Nodes.Add(new Node(other.Nodes[i]));
+            }
+
+            for (int i = 0; i < other.Nodes.Count; i++)
+            {
+                Node curNode = other.Nodes[i];
+                for (int j = 0; j < curNode.Neighbors.Count; j++)
+                {
+                    Node neighborNode = curNode.Neighbors[j].GetNeighbor(curNode);
+                    //If we don't have the connection yet, we want to add it
+                    if (!Nodes[i].Neighbors.Any(t => t.GetNeighbor(Nodes[i]) == Nodes[other.Nodes.IndexOf(neighborNode)]))
+                    {
+                        Edge e = new Edge(Nodes[i], Nodes[other.Nodes.IndexOf(neighborNode)]);
+                        Nodes[i].Neighbors.Add(e);
+                        Nodes[other.Nodes.IndexOf(neighborNode)].Neighbors.Add(e);
+                    }
+                }
+            }
+        }
+
         public Graph(int numNodes, double edgeDensity, int minEdgesPerNode, int maxEdgesPerNode, int width, int height, Random rand)
         {
             //Create all the nodes at random locations
@@ -151,6 +180,38 @@ namespace MapColoring
                 }
             }
         }
+
+        public List<Edge> GetAllEdges()
+        {
+            return Nodes.Select(t => t.Neighbors).Aggregate(new List<Edge>(), (accumulator, next) => accumulator.Concat(next).ToList()).Distinct(new EdgeReferenceComparer()).ToList();
+        }
+
+
+        /****************************************************************************************************/
+        //The following functions are used in calculating the graph heuristic.
+        //The graph heuristic prioritizes the order in which we advance the graphs.
+        /****************************************************************************************************/
+
+        /// <summary>
+        /// Total number of distinct colors used. Lower is better
+        /// If this is a high value compared to other branches, our heuristic should stray away from it
+        /// </summary>
+        public int GetTotalColorCount() => Nodes.Select(t => t.Color).Distinct().Count();
+
+        /// <summary>
+        /// Number of nodes that have yet to be colored
+        /// Low uncolored count combined with a low total color count is a respectable graph.
+        /// </summary>
+        public int GetUncoloredCount() => Nodes.Where(t => t.Color == Color.Black).Count();
+
+        /// <summary>
+        /// The number of edges that have at least one black node connection
+        /// A high number here likely means total color count is going to go up for this graph.
+        /// Example: all nodes but 1 are colored, but it has 8 edges connected to it. Very high chance it is going to have to be a new color.
+        /// </summary>
+        public int GetNumEdgesNeighboringBlack() => GetAllEdges().Where(t => t.IsNeighboringBlack()).Count();
+
+
     }
 
     class Node
@@ -159,12 +220,24 @@ namespace MapColoring
         public int X { get; set; }
         public int Y { get; set; }
 
-        public int Width { get; set; }
-        public int Height { get; set; }
+        public int Width { get; set; } //used for generating the map, not in the bnb algorithm
+        public int Height { get; set; } //used for generating the map, not in the bnb algorithm
 
-        public bool DoneWithNeighbors { get; set; } = false;
+        public bool DoneWithNeighbors { get; set; } = false; //used for generating the map, not in the bnb algorithm
 
         public List<Edge> Neighbors { get; set; } = new List<Edge>();
+
+        /// <summary>
+        /// partial deep copy constructor for node
+        /// Does not copy neighbors within the constructor
+        /// Used for the algorithm, not generation
+        /// </summary>
+        public Node(Node other)
+        {
+            this.Color = other.Color;
+            this.X = other.X;
+            this.Y = other.Y;
+        }
 
         public Node(int x, int y, int width, int height)
         {
@@ -194,6 +267,23 @@ namespace MapColoring
             X = Extensions.Clamp(X + (int)Math.Round(direction.X), 0, Width - 1);
             Y = Extensions.Clamp(Y + (int)Math.Round(direction.Y), 0, Height - 1);
         }
+
+        /****************************************************************************************************/
+        //The following functions are used in calculating the node heuristics
+        //The node heuristic prioritizes which node in the graph we want to try to color first
+        /****************************************************************************************************/
+
+        /// <summary>
+        /// Number of uncolored neighbors. Lower the better
+        /// If this is 0, then we know exactly what colors this node cannot be
+        /// </summary>
+        public int GetUncoloredNeighborCount() => Neighbors.Where(t => t.GetNeighbor(this).Color == Color.Black).Count();
+
+        /// <summary>
+        /// The number of neighbors this node has
+        /// Generally you want to color high degrees first
+        /// </summary>
+        public int GetNodeDegree() => Neighbors.Count();
     }
 
     /// <summary>
@@ -227,9 +317,35 @@ namespace MapColoring
 
         public int GetHashCode(Edge obj)
         {
-            throw new NotImplementedException();
+            return obj.GetHashCode();
+        }
+
+        /// <summary>
+        /// Should we alter to only consider if it is not double black?
+        /// </summary>
+        public bool IsNeighboringBlack()
+        {
+            if (Nodes[0].Color == Color.Black)
+                return true;
+            if (Nodes[1].Color == Color.Black)
+                return true;
+            return false;
         }
     }
+
+    class EdgeReferenceComparer : IEqualityComparer<Edge>
+    {
+        public bool Equals(Edge x, Edge y)
+        {
+            return x == y;
+        }
+
+        public int GetHashCode(Edge obj)
+        {
+            return obj.GetHashCode();
+        }
+    }
+
 
     class Vector2
     {
