@@ -8,7 +8,7 @@ namespace GeneticAlgorithm
 {
     public class Chromosome
     {
-        public object[] Genes { get; private set; }
+        public object[] Genes { get; set; }
         public double FitnessScore { get; set; } = 0;
 
         public Chromosome(object[] genes)

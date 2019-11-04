@@ -39,10 +39,12 @@ namespace GeneticAlgorithm
             double chanceToMutateEachGene,
             double maxGeneMutationDeviation,
             FitnessAlgorithm fitnessAlgorithm,
-            int maxIterationCount)
+            int maxIterationCount,
+            int logInterval = 5,
+            bool isHigherFitnessBetter = true)
         {
             //Creates a new population, automatically mutates each gene by up to maxGeneMutationDeviation
-            Population pop = new Population(populationSize, defaultGenes, maxGeneMutationDeviation);
+            Population pop = new Population(populationSize, defaultGenes, maxGeneMutationDeviation, isHigherFitnessBetter);
 
             double convergence = 0;
             double averageFitness = 0;
@@ -57,7 +59,7 @@ namespace GeneticAlgorithm
                     break;
                 }
 
-                if (i % 5 == 0)
+                if (i % logInterval == 0)
                 {
                     averageFitness = pop.CalculateAverageFitness();
                     UpdateProgressBar?.Invoke((int)(((double)i / (double)maxIterationCount) * 100), convergence, i, averageFitness, new Tuple<int, List<double>>(i, pop.GetFitnesses()));
@@ -67,7 +69,11 @@ namespace GeneticAlgorithm
                 pop.MatePopulation();
                 pop.Mutate(chanceToSelectEachChromosome, chanceToMutateEachGene, maxGeneMutationDeviation);
             }
-            return pop.Chromosomes.OrderByDescending(t => t.FitnessScore).ToList();
+
+            if (isHigherFitnessBetter)
+                return pop.Chromosomes.OrderByDescending(t => t.FitnessScore).ToList();
+            else
+                return pop.Chromosomes.OrderBy(t => t.FitnessScore).ToList();
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace _0_1Knapsack
+namespace Common
 {
     public partial class FormResults : Form
     {
@@ -17,13 +17,13 @@ namespace _0_1Knapsack
             InitializeComponent();
         }
 
-        public void InitializeChart(List<int> iterations, List<double> convergences, List<double> averageFitnesses, List<Tuple<int, List<double>>> selectedFitnesses)
+        public void InitializeChart(List<int> iterations, List<double> convergences, List<double> averageFitnesses, List<Tuple<int, List<double>>> selectedFitnesses, int logInterval)
         {
             Chart_Results.Series[0].LegendText = "Convergence";
             Chart_Results.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
             Chart_Results.ChartAreas[0].AxisX.Minimum = 0;
-            Chart_Results.ChartAreas[0].AxisX.Maximum = iterations.Last() + 5 - iterations.Last() % 5;
-            Chart_Results.ChartAreas[0].AxisX.Interval = 5;
+            Chart_Results.ChartAreas[0].AxisX.Maximum = iterations.Last() + logInterval - iterations.Last() % logInterval;
+            Chart_Results.ChartAreas[0].AxisX.Interval = logInterval;
             Chart_Results.ChartAreas[0].AxisY.Minimum = 0;
             Chart_Results.ChartAreas[0].AxisY.Maximum = 1;
             Chart_Results.Series[0].Points.DataBindXY(iterations, convergences.Select(t => 1 - t).ToList());
@@ -36,8 +36,8 @@ namespace _0_1Knapsack
             Chart_FitnessScores.Series[0]["IsXAxisQuantitative"] = "true";
             Chart_FitnessScores.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
             Chart_FitnessScores.ChartAreas[0].AxisX.Minimum = 0;
-            Chart_FitnessScores.ChartAreas[0].AxisX.Maximum = iterations.Last() + 5 - iterations.Last() % 5;
-            Chart_FitnessScores.ChartAreas[0].AxisX.Interval = 5;
+            Chart_FitnessScores.ChartAreas[0].AxisX.Maximum = iterations.Last() + logInterval - iterations.Last() % logInterval;
+            Chart_FitnessScores.ChartAreas[0].AxisX.Interval = logInterval;
 
             int parentCount = selectedFitnesses[0].Item2.Count;
             List<int> iters = new List<int>();

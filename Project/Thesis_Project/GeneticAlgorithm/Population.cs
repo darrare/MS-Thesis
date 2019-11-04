@@ -15,6 +15,8 @@ namespace GeneticAlgorithm
         public int GeneCount { get; private set; } = 0;
         public int PopulationSize { get; private set; } = 0;
 
+        public bool IsHigherFitnessBetter { get; private set; } = true;
+
         public int NumParentsToKeepEachIteration { get; private set; } = 0;
 
         /// <summary>
@@ -26,14 +28,16 @@ namespace GeneticAlgorithm
         /// <para />Some valid values: 36, 136, 528, 2080</param>
         /// <param name="defaultGenes">The set of default genes for the first generation</param>
         /// <param name="maxDerivation">Percentage wise, how much can we deviate from the default genes values</param>
+        /// <param name="isHigherFitnessBetter">(OPTIONAL) Is a higher fitness score better than a lower fitness score?</param>
         /// <param name="seed">(OPTIONAL) Seed for randomization to get same results</param>
-        public Population(int populationSize, object[] defaultGenes, double maxDerivation, int seed = 0)
+        public Population(int populationSize, object[] defaultGenes, double maxDerivation, bool isHigherFitnessBetter = true, int seed = 0)
         {
             if (seed != 0)
                 Rand = new Random(seed);
 
             GeneCount = defaultGenes.Length;
             PopulationSize = populationSize;
+            IsHigherFitnessBetter = isHigherFitnessBetter;
             NumParentsToKeepEachIteration = CalculateNumParentsToKeepEachIteration(PopulationSize);
             GenerateFirstGeneration(defaultGenes, maxDerivation);
         }
@@ -135,7 +139,10 @@ namespace GeneticAlgorithm
             if (Chromosomes.Sum(t => t.FitnessScore) == 0)
                 throw new Exception("Must calculate fitness before selection");
 
-            Chromosomes = Chromosomes.OrderByDescending(t => t.FitnessScore).Take(NumParentsToKeepEachIteration).ToList();
+            if (IsHigherFitnessBetter)
+                Chromosomes = Chromosomes.OrderByDescending(t => t.FitnessScore).Take(NumParentsToKeepEachIteration).ToList();
+            else
+                Chromosomes = Chromosomes.OrderBy(t => t.FitnessScore).Take(NumParentsToKeepEachIteration).ToList();
         }
 
         /// <summary>

@@ -174,7 +174,7 @@ namespace _0_1Knapsack
                    selectedChromosomesFitness.Add(selectedFitness);
                });
             };
-
+            int logInterval = 5;
             List<GeneticAlgorithm.Chromosome> chromosomes = await Task.Factory.StartNew(() =>
             {
                 return GeneticAlgorithm.GeneticAlgorithmClass.RunGeneticAlgorithm(
@@ -185,7 +185,9 @@ namespace _0_1Knapsack
                    double.Parse(TxtBx_PercentGenesMutated.Text),
                    double.Parse(TxtBx_PercentMutationDeviation.Text),
                    knapsack.Fitness,
-                   int.Parse(TxtBx_MaxIterations.Text));
+                   int.Parse(TxtBx_MaxIterations.Text),
+                   logInterval,
+                   true);
             });
 
             Btn_RandomizeParameters.Enabled = true;
@@ -193,8 +195,8 @@ namespace _0_1Knapsack
 
             //handle chromosomes in results data grid view
             GenerateResultsDataGridView(knapsack.GetKnapsackSolutionsFromGenes(chromosomes.Select(t => t.Genes).ToList()), knapsack.Items.ToList());
-            FormResults form = new FormResults();
-            form.InitializeChart(dataPoints.Select(t => t.Item1).ToList(), dataPoints.Select(t => t.Item2).ToList(), dataPoints.Select(t => t.Item3).ToList(), selectedChromosomesFitness);
+            Common.FormResults form = new Common.FormResults();
+            form.InitializeChart(dataPoints.Select(t => t.Item1).ToList(), dataPoints.Select(t => t.Item2).ToList(), dataPoints.Select(t => t.Item3).ToList(), selectedChromosomesFitness, logInterval);
             form.Show();
         }
 

@@ -81,6 +81,8 @@ namespace MapColoring
                 }
                 catch { /*Just leave values at 0 if the above crashes (someone messed with the file or debugging issues, should fix after next run) */ }
             }
+
+            Btn_GenerateGraph_Click(null, null);
         }
 
         /// <summary>
@@ -91,15 +93,21 @@ namespace MapColoring
             graph = new Graph(int.Parse(TxtBx_NumCountries.Text), double.Parse(TxtBx_EdgeDensity.Text),
                 int.Parse(TxtBx_MinEdgesPerCountry.Text), int.Parse(TxtBx_MaxEdgesPerCountry.Text),
                 PictureBox_Graph.Width, PictureBox_Graph.Height, rand);
-            DrawGraph();
+            DrawGraph(graph);
             if (!TestGraph())
             {
-                //throw new Exception("Graph did not pass test. Duplicate edges");
+                throw new Exception("Graph did not pass test. Duplicate edges");
             }
         }
 
-        private void DrawGraph()
+        private void DrawGraph(Graph graph)
         {
+            Dictionary<Color, Brush> brushColors = new Dictionary<Color, Brush>();
+            brushColors.Add(Color.Black, new SolidBrush(Color.Black));
+            foreach (Color c in Graph.colorOrder)
+            {
+                brushColors.Add(c, new SolidBrush(c));
+            }
             Pen pen = new Pen(Color.Black);
             Bitmap image = new Bitmap(PictureBox_Graph.Width, PictureBox_Graph.Height);
             Graphics g = Graphics.FromImage(image);
@@ -111,7 +119,7 @@ namespace MapColoring
 
             foreach (var node in graph.Nodes)
             {
-                g.DrawEllipse(pen, node.X - 10, node.Y - 10, 20, 20); //TODO: Make the width and height scale based on image size and numnodes
+                g.FillEllipse(brushColors[node.Color], node.X - 10, node.Y - 10, 20, 20); //TODO: Make the width and height scale based on image size and numnodes
             }
 
             PictureBox_Graph.Image = image;
@@ -212,7 +220,7 @@ namespace MapColoring
             }
 
             //genetic algorithm parameters
-            if (!int.TryParse(TxtBx_PopulationSize.Text, out resultI) && ValidatePopulationSize(int.Parse(TxtBx_PopulationSize.Text)))
+            if (!int.TryParse(TxtBx_PopulationSize.Text, out resultI) || !ValidatePopulationSize(int.Parse(TxtBx_PopulationSize.Text)))
                 errors += "Invalid value for Population Size" + Environment.NewLine;
             if (!double.TryParse(TxtBx_Convergence.Text, out resultD))
                 errors += "Invalid value for Convergence" + Environment.NewLine;
@@ -253,9 +261,106 @@ namespace MapColoring
             return (size == y + y * (y - 1) / 2);
         }
 
-        private void Btn_RunAlgorithm_Click(object sender, EventArgs e)
+        private async void Btn_RunAlgorithm_Click(object sender, EventArgs e)
         {
-            MapColoring algorithm = new MapColoring(graph);
+            if (IsParameterError())
+                return;
+
+            Btn_RandomizeParameters.Enabled = false;
+            Btn_GenerateGraph.Enabled = false;
+            Btn_SolveGraph.Enabled = false;
+            Btn_RunAlgorithm.Enabled = false;
+
+            List<Tuple<int, double, double>> dataPoints = new List<Tuple<int, double, double>>();
+            List<Tuple<int, List<double>>> selectedChromosomesFitness = new List<Tuple<int, List<double>>>();
+            GeneticAlgorithm.GeneticAlgorithmClass.UpdateProgressBar = (percent, convergence, iteration, averageFitness, selectedFitness) =>
+            {
+                PB_MapColoring.Invoke((MethodInvoker)delegate ()
+                {
+                    PB_MapColoring.Value = percent;
+                    LBL_Convergence.Text = convergence.ToString();
+                    LBL_Iteration.Text = iteration.ToString();
+                    dataPoints.Add(new Tuple<int, double, double>(iteration, convergence, averageFitness));
+                    selectedChromosomesFitness.Add(selectedFitness);
+                });
+            };
+            int logInterval = 1;
+            List<GeneticAlgorithm.Chromosome> chromosomes = await Task.Factory.StartNew(() =>
+            {
+                return GeneticAlgorithm.GeneticAlgorithmClass.RunGeneticAlgorithm(
+                   int.Parse(TxtBx_PopulationSize.Text),
+                   double.Parse(TxtBx_Convergence.Text),
+                   new object[] { double.Parse(TxtBx_DefaultGeneValue.Text), double.Parse(TxtBx_DefaultGeneValue.Text), double.Parse(TxtBx_DefaultGeneValue.Text), double.Parse(TxtBx_DefaultGeneValue.Text), double.Parse(TxtBx_DefaultGeneValue.Text) },
+                   double.Parse(TxtBx_PercentChromosomesMutated.Text),
+                   double.Parse(TxtBx_PercentGenesMutated.Text),
+                   double.Parse(TxtBx_PercentMutationDeviation.Text),
+                   graph.Solve,
+                   int.Parse(TxtBx_MaxIterations.Text),
+                   logInterval,
+                   false);
+            });
+
+
+            Btn_RandomizeParameters.Enabled = true;
+            Btn_GenerateGraph.Enabled = true;
+            Btn_SolveGraph.Enabled = true;
+            Btn_RunAlgorithm.Enabled = true;
+
+            DrawGraph(graph.validGraph);
+
+            GenerateResultsDataGridView(chromosomes);
+            Common.FormResults form = new Common.FormResults();
+            form.InitializeChart(dataPoints.Select(t => t.Item1).ToList(), dataPoints.Select(t => t.Item2).ToList(), dataPoints.Select(t => t.Item3).ToList(), selectedChromosomesFitness, logInterval);
+            form.Show();
+        }
+
+        private void GenerateResultsDataGridView(List<GeneticAlgorithm.Chromosome> solutions)
+        {
+            DataTable table = new DataTable("Final Evolution");
+            table.Columns.Add("id");
+            table.Columns.Add("Duration");
+            table.Columns.Add("Total Color Count Gene");
+            table.Columns.Add("Colored Nodes Gene");
+            table.Columns.Add("Num Edges Neighboring Black Gene");
+            table.Columns.Add("Uncolored Neighbor Count Gene");
+            table.Columns.Add("Node Degree Gene");
+
+            List<List<double>> genes = new List<List<double>>();
+            solutions.ForEach(t => genes.Add(t.Genes.Select(x => (double)x / (double)t.Genes.Max()).ToList()));
+            
+
+            table.Rows.Add(new object[] {0, "AVERAGE",
+                genes.Average(t => (double)t[0]),
+                genes.Average(t => (double)t[1]),
+                genes.Average(t => (double)t[2]),
+                genes.Average(t => (double)t[3]),
+                genes.Average(t => (double)t[4])});
+
+            for (int i = 0; i < solutions.Count; i++)
+            {
+                double[] normalizedGenes = solutions[i].Genes.Select(t => (double)t / (double)solutions[i].Genes.Max()).ToArray();
+                table.Rows.Add(new object[] { i + 1,
+                    solutions[i].FitnessScore,
+                    normalizedGenes[0].ToString("#.###"),
+                    normalizedGenes[1].ToString("#.###"),
+                    normalizedGenes[2].ToString("#.###"),
+                    normalizedGenes[3].ToString("#.###"),
+                    normalizedGenes[4].ToString("#.###")
+                });
+            }
+
+            DGV_Results.DataSource = table;
+            for (int i = 0; i < DGV_Results.Columns.Count; i++)
+            {
+                DGV_Results.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+            }
+        }
+
+        private void Btn_SolveGraph_Click(object sender, EventArgs e)
+        {
+            FormSolveGraph form = new FormSolveGraph();
+            form.GenerateGraph(graph);
+            form.Show();
         }
     }
 }

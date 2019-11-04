@@ -1,4 +1,4 @@
-﻿namespace _0_1Knapsack
+﻿namespace Common
 {
     partial class FormResults
     {

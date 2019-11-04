@@ -4,4 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Update="FormResults.Designer.cs">
+      <DependentUpon>FormResults.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
 </Project>

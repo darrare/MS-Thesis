@@ -4,13 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace MapColoring
 {
-    class Graph
+    public class Graph
     {
+        /// <summary>
+        /// Due to the four color theorem, purple and on should NEVER be used in an optimal solution
+        /// </summary>
+        public static List<Color> colorOrder = new List<Color>() { Color.Red, Color.Blue, Color.Green, Color.Yellow };
+
         public List<Node> Nodes { get; set; } = new List<Node>();
         const double UNCOMFORTABLE_DISTANCE_IN_PERCENTAGE = .05; //within 5% distance compared to top left to bottom right of image
+        public List<Edge> Edges;
+
+        public Graph validGraph;
 
         /// <summary>
         /// Deep copy constructor for a graph
@@ -183,9 +192,22 @@ namespace MapColoring
 
         public List<Edge> GetAllEdges()
         {
-            return Nodes.Select(t => t.Neighbors).Aggregate(new List<Edge>(), (accumulator, next) => accumulator.Concat(next).ToList()).Distinct(new EdgeReferenceComparer()).ToList();
+            if (Edges == null)
+            {
+                List<Edge> result = Nodes.Select(t => t.Neighbors).Aggregate(new List<Edge>(), (accumulator, next) => accumulator.Concat(next).ToList()).Distinct(new EdgeReferenceComparer()).ToList();
+                Edges = result;
+                return Edges;
+            }
+            return Edges;
         }
 
+        /// <summary>
+        /// Gets the number of edges in the graph
+        /// </summary>
+        public int GetEdgeCount()
+        {
+            return Edges?.Count ?? GetAllEdges().Count;
+        }
 
         /****************************************************************************************************/
         //The following functions are used in calculating the graph heuristic.
@@ -193,28 +215,172 @@ namespace MapColoring
         /****************************************************************************************************/
 
         /// <summary>
+        /// This should run the algorithm to find a solution. The fitness score should be the time it takes to finish.
+        /// </summary>
+        /// <param name="totalColorWeight"></param>
+        /// <param name="uncoloredWeight"></param>
+        /// <param name="numEdgesNeighboringBlackWeight"></param>
+        /// <returns></returns>
+        public double Fitness(double totalColorWeight, double uncoloredWeight, double numEdgesNeighboringBlackWeight)
+        {
+            double tccw = totalColorWeight * GetTotalColorCount();
+            double ucw = uncoloredWeight * GetColoredCount();
+            double nenbw = numEdgesNeighboringBlackWeight * GetNumEdgesNeighboringBlack();
+            return tccw + ucw + nenbw;
+        }
+
+        /// <summary>
+        /// This should run the algorithm to find a solution. The fitness score should be the time it takes to finish.
+        /// </summary>
+        public double Solve(object[] genes)
+        {
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
+
+            SortedList<double, Graph> toSearch = new SortedList<double, Graph>();
+            toSearch.Add(this.Fitness((double)genes[0], (double)genes[1], (double)genes[2]), new Graph(this));
+
+            //Store the maximum degree of the nodes in this graph for future use
+            double maxDegreeNode = this.Nodes.Max(t => t.GetNodeDegree());
+
+            bool foundResult = false;
+            int count = 0;
+            while (toSearch.Any())
+            {
+                count++;
+                Graph curGraph = toSearch.Pop(); //Take the most efficient graph according to the heuristic
+                //Find the most valuable nodes to check in curGraph
+                List<Node> priorityNodes = curGraph.Nodes.OrderByDescending(t => t.Fitness((double)genes[3], (double)genes[4], maxDegreeNode)).Take(2).ToList();
+                //Get the index of the priority nodes
+                List<int> priorityNodeIndexes = priorityNodes.Select(t => curGraph.Nodes.IndexOf(t)).ToList();
+
+                for (int i = 0; i < priorityNodeIndexes.Count; i++)
+                {
+                    Graph newGraph = new Graph(curGraph);
+                    //If after the advancement we have a graph that is satisfied, we are done. Note, this result is required to use <= 4 colors.
+                    bool? result = newGraph.AdvanceOneStage(priorityNodeIndexes[i]);
+                    if (result == null)
+                    {
+                        //The result is trying to use more than 4 colors. Don't add this to the search list
+                        break;
+                    }
+
+                    if (result.Value)
+                    {
+                        foundResult = true;
+                        //We have found a solution, so set the nodes and edges of the solution to "this" so that we can display it.
+                        validGraph = new Graph(newGraph);
+                        break;
+                    }
+                    toSearch.SafeAdd(newGraph.Fitness((double)genes[0], (double)genes[1], (double)genes[2]), newGraph);
+                }
+                //No sense continuing if we have found the result. Note, this result is required to use <= 4 colors.
+                if (foundResult)
+                {
+                    break;
+                }
+            }
+
+            if (!foundResult)
+                throw new Exception("There is always a result.");
+
+            timer.Stop();
+            return count;
+            //return timer.ElapsedTicks; //inverted fitness, lower is better
+        }
+
+        /// <summary>
+        /// Advances this graph one stage by altering the node at the given index.
+        /// Node is colored the first available color in the colorOrder list
+        /// </summary>
+        /// <param name="index">Index of the node to alter</param>
+        public bool? AdvanceOneStage(int index)
+        {
+            Color[] neighborColors = Nodes[index].Neighbors.Select(t => t.GetNeighbor(Nodes[index]).Color).ToArray();
+            bool foundColor = false;
+            foreach (Color c in colorOrder)
+            {
+                if (!neighborColors.Contains(c))
+                {
+                    Nodes[index].Color = c;
+                    foundColor = true;
+                    break;
+                }
+            }
+
+            if (!foundColor)
+            {
+                return null;
+            }
+
+            //After coloring the node, validate to see if it satisfied the graph
+            return Validate();
+        }
+
+        /// <summary>
+        /// Verifies that the graph is actually solved
+        /// Doing this way because this form of validation is much faster than comparing all edges. 
+        /// Only compare edges if we are finished with the graph.
+        /// </summary>
+        /// <returns>True if it is satisfied, false otherwise</returns>
+        private bool Validate()
+        {
+            //If no more uncolored
+            if (GetColoredCount() == Nodes.Count)
+            {
+                //If satisfies theorem https://en.wikipedia.org/wiki/Four_color_theorem
+                if (GetTotalColorCount() <= 4)
+                {
+                    //If no two neighbors have the same color
+                    if (InDepthValidate())
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        throw new Exception("Logic error. Should never pass GetUncoloredCount() == 0 and then fail InDepthValidate().");
+                    }
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Checks each edge to make sure the graph is logically satisfied
+        /// </summary>
+        /// <returns>True if it is satisfied, false otherwise</returns>
+        private bool InDepthValidate()
+        {
+            foreach (var edge in GetAllEdges())
+            {
+                if (edge.Nodes[0].Color == edge.Nodes[1].Color)
+                    return false;
+            }
+            return true;
+        }
+
+
+        /// <summary>
         /// Total number of distinct colors used. Lower is better
         /// If this is a high value compared to other branches, our heuristic should stray away from it
         /// </summary>
-        public int GetTotalColorCount() => Nodes.Select(t => t.Color).Distinct().Count();
+        public double GetTotalColorCount() => Nodes.Select(t => t.Color).Distinct().Count();
 
         /// <summary>
         /// Number of nodes that have yet to be colored
         /// Low uncolored count combined with a low total color count is a respectable graph.
         /// </summary>
-        public int GetUncoloredCount() => Nodes.Where(t => t.Color == Color.Black).Count();
+        public double GetColoredCount() => Nodes.Where(t => t.Color != Color.Black).Count();
 
         /// <summary>
         /// The number of edges that have at least one black node connection
         /// A high number here likely means total color count is going to go up for this graph.
         /// Example: all nodes but 1 are colored, but it has 8 edges connected to it. Very high chance it is going to have to be a new color.
         /// </summary>
-        public int GetNumEdgesNeighboringBlack() => GetAllEdges().Where(t => t.IsNeighboringBlack()).Count();
-
-
+        public double GetNumEdgesNeighboringBlack() => GetAllEdges().Where(t => t.IsNeighboringBlack()).Count();
     }
 
-    class Node
+    public class Node
     {
         public Color Color { get; set; } = Color.Black;
         public int X { get; set; }
@@ -274,22 +440,39 @@ namespace MapColoring
         /****************************************************************************************************/
 
         /// <summary>
+        /// Gets the fitness of the given node to compare against other nodes in the graph
+        /// </summary>
+        /// <param name="uncoloredNeighborWeight">Weight determined by heuristic for uncolored neighbor interest</param>
+        /// <param name="nodeDegreeWeight">Weight determined by heuristic for node degree interest</param>
+        /// <param name="maxDegreeNode">The node with the highest degree's degree</param>
+        /// <returns>The fitness</returns>
+        public double Fitness(double uncoloredNeighborWeight, double nodeDegreeWeight, double maxDegreeNode)
+        {
+            //If this node has already been colored. We need not consider it.
+            if (this.Color != Color.Black)
+                return 0;
+            double unw = ((uncoloredNeighborWeight * GetUncoloredNeighborCount()) * maxDegreeNode) / GetNodeDegree(); //normalized with maxDegreeNode
+            double ndw = ((nodeDegreeWeight * GetNodeDegree()) * maxDegreeNode) / GetNodeDegree();//normalized with maxDegreeNode
+            return unw + ndw;
+        }
+
+        /// <summary>
         /// Number of uncolored neighbors. Lower the better
         /// If this is 0, then we know exactly what colors this node cannot be
         /// </summary>
-        public int GetUncoloredNeighborCount() => Neighbors.Where(t => t.GetNeighbor(this).Color == Color.Black).Count();
+        public double GetUncoloredNeighborCount() => Neighbors.Where(t => t.GetNeighbor(this).Color == Color.Black).Count();
 
         /// <summary>
         /// The number of neighbors this node has
         /// Generally you want to color high degrees first
         /// </summary>
-        public int GetNodeDegree() => Neighbors.Count();
+        public double GetNodeDegree() => Neighbors.Count();
     }
 
     /// <summary>
     /// Edge class. Only holds nodes as we don't care about distance in this problem.
     /// </summary>
-    class Edge : IEqualityComparer<Edge>
+    public class Edge : IEqualityComparer<Edge>
     {
         public Node[] Nodes { get; set; } = new Node[2];
         

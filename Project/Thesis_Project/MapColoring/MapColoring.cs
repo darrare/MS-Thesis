@@ -10,18 +10,32 @@ namespace MapColoring
     class MapColoring
     {
         /// <summary>
-        /// Due to the four color theorem, purple should NEVER be used.
+        /// Solve the graph with the given genes.
+        /// Used for testing individual gene sets
         /// </summary>
-        List<Color> colorOrder = new List<Color>() { Color.Red, Color.Blue, Color.Green, Color.Yellow, Color.Purple };
-
-        public MapColoring(Graph graph)
+        /// <returns>Fitness score of the given graph</returns>
+        public static double Solve(Graph graph, int numBranchesToSplit,
+            double getTotalColorCountWeight,
+            double getUncoloredCountWeight,
+            double getNumEdgesNeighboringBlackWeight,
+            double getUncoloredNeighborCountWeight,
+            double getNodeDegreeWeight)
         {
-            Graph g2 = new Graph(graph);
+            object[] genes = new object[] { numBranchesToSplit, getTotalColorCountWeight, getUncoloredCountWeight, getNumEdgesNeighboringBlackWeight, getUncoloredNeighborCountWeight, getNodeDegreeWeight };
+
+            return graph.Solve(genes);
         }
 
-        public double Fitness(object[] genes)
+        /// <summary>
+        /// Solve the graph with the given genes.
+        /// Used for testing individual gene sets
+        /// </summary>
+        /// <returns>Fitness score of the given graph</returns>
+        public static double Solve(Graph graph, object[] genes)
         {
-            throw new NotImplementedException();
+            if (genes.Length != 6)
+                throw new Exception("Map coloring algorithm uses 6 genes.");
+            return graph.Solve(genes);
         }
     }
 }

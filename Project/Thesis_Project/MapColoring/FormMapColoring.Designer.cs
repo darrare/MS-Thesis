@@ -47,6 +47,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.TxtBx_MinEdgesPerCountry = new System.Windows.Forms.TextBox();
+            this.Btn_GenerateGraph = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.TxtBx_MaxEdgesPerCountry = new System.Windows.Forms.TextBox();
             this.TxtBx_NumCountries = new System.Windows.Forms.TextBox();
@@ -54,13 +55,22 @@
             this.label11 = new System.Windows.Forms.Label();
             this.TxtBx_EdgeDensity = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.Btn_GenerateGraph = new System.Windows.Forms.Button();
             this.Btn_RandomizeParameters = new System.Windows.Forms.Button();
             this.PictureBox_Graph = new System.Windows.Forms.PictureBox();
             this.Btn_RunAlgorithm = new System.Windows.Forms.Button();
+            this.Btn_SolveGraph = new System.Windows.Forms.Button();
+            this.LBL_Iteration = new System.Windows.Forms.Label();
+            this.LBL_Convergence = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.PB_MapColoring = new System.Windows.Forms.ProgressBar();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.DGV_Results = new System.Windows.Forms.DataGridView();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox_Graph)).BeginInit();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DGV_Results)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox3
@@ -220,6 +230,7 @@
             // 
             this.groupBox1.Controls.Add(this.TxtBx_MinEdgesPerCountry);
             this.groupBox1.Controls.Add(this.Btn_GenerateGraph);
+            this.groupBox1.Controls.Add(this.Btn_RandomizeParameters);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.TxtBx_MaxEdgesPerCountry);
             this.groupBox1.Controls.Add(this.TxtBx_NumCountries);
@@ -229,7 +240,7 @@
             this.groupBox1.Controls.Add(this.label14);
             this.groupBox1.Location = new System.Drawing.Point(260, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(219, 138);
+            this.groupBox1.Size = new System.Drawing.Size(219, 146);
             this.groupBox1.TabIndex = 28;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Map Generating Parameters";
@@ -240,6 +251,16 @@
             this.TxtBx_MinEdgesPerCountry.Name = "TxtBx_MinEdgesPerCountry";
             this.TxtBx_MinEdgesPerCountry.Size = new System.Drawing.Size(100, 20);
             this.TxtBx_MinEdgesPerCountry.TabIndex = 19;
+            // 
+            // Btn_GenerateGraph
+            // 
+            this.Btn_GenerateGraph.Location = new System.Drawing.Point(112, 97);
+            this.Btn_GenerateGraph.Name = "Btn_GenerateGraph";
+            this.Btn_GenerateGraph.Size = new System.Drawing.Size(100, 43);
+            this.Btn_GenerateGraph.TabIndex = 30;
+            this.Btn_GenerateGraph.Text = "Generate Graph";
+            this.Btn_GenerateGraph.UseVisualStyleBackColor = true;
+            this.Btn_GenerateGraph.Click += new System.EventHandler(this.Btn_GenerateGraph_Click);
             // 
             // label5
             // 
@@ -298,21 +319,11 @@
             this.label14.TabIndex = 14;
             this.label14.Text = "Edge Density";
             // 
-            // Btn_GenerateGraph
-            // 
-            this.Btn_GenerateGraph.Location = new System.Drawing.Point(112, 97);
-            this.Btn_GenerateGraph.Name = "Btn_GenerateGraph";
-            this.Btn_GenerateGraph.Size = new System.Drawing.Size(100, 33);
-            this.Btn_GenerateGraph.TabIndex = 30;
-            this.Btn_GenerateGraph.Text = "Generate Graph";
-            this.Btn_GenerateGraph.UseVisualStyleBackColor = true;
-            this.Btn_GenerateGraph.Click += new System.EventHandler(this.Btn_GenerateGraph_Click);
-            // 
             // Btn_RandomizeParameters
             // 
-            this.Btn_RandomizeParameters.Location = new System.Drawing.Point(260, 156);
+            this.Btn_RandomizeParameters.Location = new System.Drawing.Point(6, 97);
             this.Btn_RandomizeParameters.Name = "Btn_RandomizeParameters";
-            this.Btn_RandomizeParameters.Size = new System.Drawing.Size(106, 43);
+            this.Btn_RandomizeParameters.Size = new System.Drawing.Size(100, 43);
             this.Btn_RandomizeParameters.TabIndex = 29;
             this.Btn_RandomizeParameters.Text = "Randomize Parameters";
             this.Btn_RandomizeParameters.UseVisualStyleBackColor = true;
@@ -329,32 +340,112 @@
             // 
             // Btn_RunAlgorithm
             // 
-            this.Btn_RunAlgorithm.Location = new System.Drawing.Point(373, 156);
+            this.Btn_RunAlgorithm.Location = new System.Drawing.Point(373, 161);
             this.Btn_RunAlgorithm.Name = "Btn_RunAlgorithm";
-            this.Btn_RunAlgorithm.Size = new System.Drawing.Size(106, 43);
+            this.Btn_RunAlgorithm.Size = new System.Drawing.Size(106, 38);
             this.Btn_RunAlgorithm.TabIndex = 32;
             this.Btn_RunAlgorithm.Text = "Run Algorithm";
             this.Btn_RunAlgorithm.UseVisualStyleBackColor = true;
             this.Btn_RunAlgorithm.Click += new System.EventHandler(this.Btn_RunAlgorithm_Click);
             // 
-            // MapColoring
+            // Btn_SolveGraph
+            // 
+            this.Btn_SolveGraph.Location = new System.Drawing.Point(260, 161);
+            this.Btn_SolveGraph.Name = "Btn_SolveGraph";
+            this.Btn_SolveGraph.Size = new System.Drawing.Size(106, 38);
+            this.Btn_SolveGraph.TabIndex = 33;
+            this.Btn_SolveGraph.Text = "Solve Graph";
+            this.Btn_SolveGraph.UseVisualStyleBackColor = true;
+            this.Btn_SolveGraph.Click += new System.EventHandler(this.Btn_SolveGraph_Click);
+            // 
+            // LBL_Iteration
+            // 
+            this.LBL_Iteration.AutoSize = true;
+            this.LBL_Iteration.Location = new System.Drawing.Point(86, 482);
+            this.LBL_Iteration.Name = "LBL_Iteration";
+            this.LBL_Iteration.Size = new System.Drawing.Size(13, 13);
+            this.LBL_Iteration.TabIndex = 38;
+            this.LBL_Iteration.Text = "0";
+            // 
+            // LBL_Convergence
+            // 
+            this.LBL_Convergence.AutoSize = true;
+            this.LBL_Convergence.Location = new System.Drawing.Point(86, 469);
+            this.LBL_Convergence.Name = "LBL_Convergence";
+            this.LBL_Convergence.Size = new System.Drawing.Size(13, 13);
+            this.LBL_Convergence.TabIndex = 37;
+            this.LBL_Convergence.Text = "1";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(9, 482);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(45, 13);
+            this.label1.TabIndex = 36;
+            this.label1.Text = "Iteration";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(9, 469);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(71, 13);
+            this.label2.TabIndex = 35;
+            this.label2.Text = "Convergence";
+            // 
+            // PB_MapColoring
+            // 
+            this.PB_MapColoring.Location = new System.Drawing.Point(12, 439);
+            this.PB_MapColoring.Name = "PB_MapColoring";
+            this.PB_MapColoring.Size = new System.Drawing.Size(1004, 23);
+            this.PB_MapColoring.TabIndex = 34;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.DGV_Results);
+            this.groupBox2.Location = new System.Drawing.Point(12, 205);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(467, 228);
+            this.groupBox2.TabIndex = 39;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Results";
+            // 
+            // DGV_Results
+            // 
+            this.DGV_Results.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DGV_Results.Location = new System.Drawing.Point(6, 19);
+            this.DGV_Results.Name = "DGV_Results";
+            this.DGV_Results.Size = new System.Drawing.Size(454, 203);
+            this.DGV_Results.TabIndex = 0;
+            // 
+            // FormMapColoring
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1028, 444);
+            this.ClientSize = new System.Drawing.Size(1028, 501);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.LBL_Iteration);
+            this.Controls.Add(this.LBL_Convergence);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.PB_MapColoring);
+            this.Controls.Add(this.Btn_SolveGraph);
             this.Controls.Add(this.Btn_RunAlgorithm);
             this.Controls.Add(this.PictureBox_Graph);
-            this.Controls.Add(this.Btn_RandomizeParameters);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox3);
-            this.Name = "MapColoring";
+            this.Name = "FormMapColoring";
             this.Text = "Map Coloring";
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox_Graph)).EndInit();
+            this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.DGV_Results)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -390,6 +481,14 @@
         private System.Windows.Forms.Button Btn_RandomizeParameters;
         private System.Windows.Forms.PictureBox PictureBox_Graph;
         private System.Windows.Forms.Button Btn_RunAlgorithm;
+        private System.Windows.Forms.Button Btn_SolveGraph;
+        private System.Windows.Forms.Label LBL_Iteration;
+        private System.Windows.Forms.Label LBL_Convergence;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ProgressBar PB_MapColoring;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.DataGridView DGV_Results;
     }
 }
 

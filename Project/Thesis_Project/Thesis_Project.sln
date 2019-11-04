@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeneticAlgorithm", "Genetic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapColoring", "MapColoring\MapColoring.csproj", "{901BB3F6-DAB8-4F0B-B9DE-B83E2138A2E2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{D5BF308D-C0C6-4FBD-BDB6-6240B80C2F46}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{901BB3F6-DAB8-4F0B-B9DE-B83E2138A2E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{901BB3F6-DAB8-4F0B-B9DE-B83E2138A2E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{901BB3F6-DAB8-4F0B-B9DE-B83E2138A2E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5BF308D-C0C6-4FBD-BDB6-6240B80C2F46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5BF308D-C0C6-4FBD-BDB6-6240B80C2F46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5BF308D-C0C6-4FBD-BDB6-6240B80C2F46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5BF308D-C0C6-4FBD-BDB6-6240B80C2F46}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

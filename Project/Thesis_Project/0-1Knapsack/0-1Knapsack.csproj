@@ -54,12 +54,6 @@
       <DependentUpon>FormCompareAgainstGreedy.cs</DependentUpon>
     </Compile>
     <Compile Include="Knapsack.cs" />
-    <Compile Include="FormResults.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormResults.Designer.cs">
-      <DependentUpon>FormResults.cs</DependentUpon>
-    </Compile>
     <Compile Include="FormZeroOneKnapsack.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -70,9 +64,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormCompareAgainstGreedy.resx">
       <DependentUpon>FormCompareAgainstGreedy.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormResults.resx">
-      <DependentUpon>FormResults.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormZeroOneKnapsack.resx">
       <DependentUpon>FormZeroOneKnapsack.cs</DependentUpon>
@@ -100,6 +91,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{d5bf308d-c0c6-4fbd-bdb6-6240b80c2f46}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GeneticAlgorithm\GeneticAlgorithm.csproj">
       <Project>{5d166d4c-f9d4-42d4-bac3-70454c2ac185}</Project>
       <Name>GeneticAlgorithm</Name>
