@@ -10,7 +10,7 @@ namespace GeneticAlgorithm
 
     public static class GeneticAlgorithmClass
     {
-        public static Action<int, double, int, double, Tuple<int, List<double>>> UpdateProgressBar { get; set; }
+        public static Action<int, double, int, double, double, double, Tuple<int, List<double>>> UpdateProgressBar { get; set; }
 
         /// <summary>
         /// Runs the genetic algorithm using the given parameters to solve for a list of Chromosomes that satisfy the problem
@@ -48,6 +48,8 @@ namespace GeneticAlgorithm
 
             double convergence = 0;
             double averageFitness = 0;
+            double maximumFitness = 0;
+            double minimumFitness = 0;
             int i;
             for (i = 0; i < maxIterationCount; i++)
             {
@@ -55,14 +57,18 @@ namespace GeneticAlgorithm
                 if ((convergence = pop.CalculateConvergence()) <= maxConvergenceDeviationToAccept)
                 {
                     averageFitness = pop.CalculateAverageFitness();
-                    UpdateProgressBar?.Invoke((int)(((double)i / (double)maxIterationCount) * 100), convergence, i, averageFitness, new Tuple<int, List<double>>(i, new List<double>()));
+                    minimumFitness = pop.CalculateMinimumFitness();
+                    maximumFitness = pop.CalculateMaximumFitness();
+                    UpdateProgressBar?.Invoke((int)(((double)i / (double)maxIterationCount) * 100), convergence, i, averageFitness, minimumFitness, maximumFitness, new Tuple<int, List<double>>(i, new List<double>()));
                     break;
                 }
 
                 if (i % logInterval == 0)
                 {
                     averageFitness = pop.CalculateAverageFitness();
-                    UpdateProgressBar?.Invoke((int)(((double)i / (double)maxIterationCount) * 100), convergence, i, averageFitness, new Tuple<int, List<double>>(i, pop.GetFitnesses()));
+                    minimumFitness = pop.CalculateMinimumFitness();
+                    maximumFitness = pop.CalculateMaximumFitness();
+                    UpdateProgressBar?.Invoke((int)(((double)i / (double)maxIterationCount) * 100), convergence, i, averageFitness, minimumFitness, maximumFitness, new Tuple<int, List<double>>(i, pop.GetFitnesses()));
                 }
 
                 pop.RemoveUnworthy();

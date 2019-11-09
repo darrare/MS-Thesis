@@ -271,16 +271,16 @@ namespace MapColoring
             Btn_SolveGraph.Enabled = false;
             Btn_RunAlgorithm.Enabled = false;
 
-            List<Tuple<int, double, double>> dataPoints = new List<Tuple<int, double, double>>();
+            List<Tuple<int, double, double, double, double>> dataPoints = new List<Tuple<int, double, double, double, double>>();
             List<Tuple<int, List<double>>> selectedChromosomesFitness = new List<Tuple<int, List<double>>>();
-            GeneticAlgorithm.GeneticAlgorithmClass.UpdateProgressBar = (percent, convergence, iteration, averageFitness, selectedFitness) =>
+            GeneticAlgorithm.GeneticAlgorithmClass.UpdateProgressBar = (percent, convergence, iteration, averageFitness, minimumFitness, maximumFitness, selectedFitness) =>
             {
                 PB_MapColoring.Invoke((MethodInvoker)delegate ()
                 {
                     PB_MapColoring.Value = percent;
                     LBL_Convergence.Text = convergence.ToString();
                     LBL_Iteration.Text = iteration.ToString();
-                    dataPoints.Add(new Tuple<int, double, double>(iteration, convergence, averageFitness));
+                    dataPoints.Add(new Tuple<int, double, double, double, double>(iteration, convergence, averageFitness, minimumFitness, maximumFitness));
                     selectedChromosomesFitness.Add(selectedFitness);
                 });
             };
@@ -310,7 +310,7 @@ namespace MapColoring
 
             GenerateResultsDataGridView(chromosomes);
             Common.FormResults form = new Common.FormResults();
-            form.InitializeChart(dataPoints.Select(t => t.Item1).ToList(), dataPoints.Select(t => t.Item2).ToList(), dataPoints.Select(t => t.Item3).ToList(), selectedChromosomesFitness, logInterval);
+            form.InitializeChart(dataPoints.Select(t => t.Item1).ToList(), dataPoints.Select(t => t.Item2).ToList(), dataPoints.Select(t => t.Item3).ToList(), dataPoints.Select(t => t.Item4).ToList(), dataPoints.Select(t => t.Item5).ToList(), selectedChromosomesFitness, logInterval);
             form.Show();
         }
 

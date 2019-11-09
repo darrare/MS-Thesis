@@ -48,6 +48,8 @@ namespace MapColoring
                     }
                 }
             }
+            if (other.validGraph != null)
+                validGraph = new Graph(other.validGraph);
         }
 
         public Graph(int numNodes, double edgeDensity, int minEdgesPerNode, int maxEdgesPerNode, int width, int height, Random rand)
@@ -55,7 +57,7 @@ namespace MapColoring
             //Create all the nodes at random locations
             for (int i = 0; i < numNodes; i++)
             {
-                Nodes.Add(new Node(rand.Next(0, width - 1), rand.Next(0, height - 1), width, height));
+                Nodes.Add(new Node(rand.Next(0, width - 10), rand.Next(0, height - 10), width, height));
             }
 
             double uncomfortableDistance = Math.Sqrt(Math.Pow(width, 2) + Math.Pow(height, 2)) * UNCOMFORTABLE_DISTANCE_IN_PERCENTAGE;
@@ -218,13 +220,13 @@ namespace MapColoring
         /// This should run the algorithm to find a solution. The fitness score should be the time it takes to finish.
         /// </summary>
         /// <param name="totalColorWeight"></param>
-        /// <param name="uncoloredWeight"></param>
+        /// <param name="coloredWeight"></param>
         /// <param name="numEdgesNeighboringBlackWeight"></param>
         /// <returns></returns>
-        public double Fitness(double totalColorWeight, double uncoloredWeight, double numEdgesNeighboringBlackWeight)
+        public double Fitness(double totalColorWeight, double coloredWeight, double numEdgesNeighboringBlackWeight)
         {
             double tccw = totalColorWeight * GetTotalColorCount();
-            double ucw = uncoloredWeight * GetColoredCount();
+            double ucw = coloredWeight * GetColoredCount();
             double nenbw = numEdgesNeighboringBlackWeight * GetNumEdgesNeighboringBlack();
             return tccw + ucw + nenbw;
         }
@@ -269,7 +271,10 @@ namespace MapColoring
                     {
                         foundResult = true;
                         //We have found a solution, so set the nodes and edges of the solution to "this" so that we can display it.
-                        validGraph = new Graph(newGraph);
+                        if (validGraph == null)
+                            validGraph = new Graph(newGraph);
+                        else if (validGraph.GetTotalColorCount() > newGraph.GetTotalColorCount())
+                            validGraph = new Graph(newGraph);
                         break;
                     }
                     toSearch.SafeAdd(newGraph.Fitness((double)genes[0], (double)genes[1], (double)genes[2]), newGraph);
@@ -430,8 +435,8 @@ namespace MapColoring
             direction.X *= distance;
             direction.Y *= distance;
 
-            X = Extensions.Clamp(X + (int)Math.Round(direction.X), 0, Width - 1);
-            Y = Extensions.Clamp(Y + (int)Math.Round(direction.Y), 0, Height - 1);
+            X = Extensions.Clamp(X + (int)Math.Round(direction.X), 0, Width - 10);
+            Y = Extensions.Clamp(Y + (int)Math.Round(direction.Y), 0, Height - 10);
         }
 
         /****************************************************************************************************/

@@ -17,7 +17,7 @@ namespace Common
             InitializeComponent();
         }
 
-        public void InitializeChart(List<int> iterations, List<double> convergences, List<double> averageFitnesses, List<Tuple<int, List<double>>> selectedFitnesses, int logInterval)
+        public void InitializeChart(List<int> iterations, List<double> convergences, List<double> averageFitnesses, List<double> minimumFitness, List<double> maximumFitness, List<Tuple<int, List<double>>> selectedFitnesses, int logInterval)
         {
             Chart_Results.Series[0].LegendText = "Convergence";
             Chart_Results.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -51,6 +51,46 @@ namespace Common
                 points.AddRange(yData.Item2);
             }
             Chart_FitnessScores.Series[0].Points.DataBindXY(iters, points);
+
+            Chart_FitnessRange.Series[0].LegendText = "Average fitness";
+            Chart_FitnessRange.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            Chart_FitnessRange.ChartAreas[0].AxisX.Minimum = 0;
+            Chart_FitnessRange.ChartAreas[0].AxisX.Maximum = iterations.Last() + logInterval - iterations.Last() % logInterval;
+            Chart_FitnessRange.ChartAreas[0].AxisX.Interval = logInterval;
+            Chart_FitnessRange.ChartAreas[0].AxisY.Minimum = 0;
+            //Chart_FitnessRange.ChartAreas[0].AxisY.Maximum = Math.Ceiling(averageFitnesses.Average()); //average of averages
+            Chart_FitnessRange.Series[0].Points.DataBindXY(iterations, averageFitnesses);
+
+            Chart_FitnessRange.Series.Add(new System.Windows.Forms.DataVisualization.Charting.Series());
+            Chart_FitnessRange.Series[1].LegendText = "Maximum fitness";
+            Chart_FitnessRange.Series[1].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            Chart_FitnessRange.Series[1].Points.DataBindXY(iterations, maximumFitness);
+
+            Chart_FitnessRange.Series.Add(new System.Windows.Forms.DataVisualization.Charting.Series());
+            Chart_FitnessRange.Series[2].LegendText = "Minimum fitness";
+            Chart_FitnessRange.Series[2].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            Chart_FitnessRange.Series[2].Points.DataBindXY(iterations, minimumFitness);
+
+
+            Chart_FitnessRangeFocused.Series[0].LegendText = "Average fitness";
+            Chart_FitnessRangeFocused.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            Chart_FitnessRangeFocused.ChartAreas[0].AxisX.Minimum = 0;
+            Chart_FitnessRangeFocused.ChartAreas[0].AxisX.Maximum = iterations.Last() + logInterval - iterations.Last() % logInterval;
+            Chart_FitnessRangeFocused.ChartAreas[0].AxisX.Interval = logInterval;
+            Chart_FitnessRangeFocused.ChartAreas[0].AxisY.Minimum = minimumFitness.Min();
+            Chart_FitnessRangeFocused.ChartAreas[0].AxisY.Maximum = minimumFitness.Max();
+            Chart_FitnessRangeFocused.Series[0].Points.DataBindXY(iterations, averageFitnesses);
+
+            Chart_FitnessRangeFocused.Series.Add(new System.Windows.Forms.DataVisualization.Charting.Series());
+            Chart_FitnessRangeFocused.Series[1].LegendText = "Maximum fitness";
+            Chart_FitnessRangeFocused.Series[1].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            Chart_FitnessRangeFocused.Series[1].Points.DataBindXY(iterations, maximumFitness);
+
+            Chart_FitnessRangeFocused.Series.Add(new System.Windows.Forms.DataVisualization.Charting.Series());
+            Chart_FitnessRangeFocused.Series[2].LegendText = "Minimum fitness";
+            Chart_FitnessRangeFocused.Series[2].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            Chart_FitnessRangeFocused.Series[2].Points.DataBindXY(iterations, minimumFitness);
+
         }
     }
 }

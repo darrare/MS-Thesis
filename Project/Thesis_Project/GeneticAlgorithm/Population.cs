@@ -109,11 +109,22 @@ namespace GeneticAlgorithm
         /// <returns>The average fitness relative to 0-1</returns>
         public double CalculateAverageFitness()
         {
+            return Chromosomes.Average(t => t.FitnessScore);
             double average = Chromosomes.Average(t => t.FitnessScore);
             double min = Chromosomes.Min(t => t.FitnessScore);
             double max = Chromosomes.Max(t => t.FitnessScore);
 
             return (average - min) / (max - min);
+        }
+
+        public double CalculateMaximumFitness()
+        {
+            return Chromosomes.Max(t => t.FitnessScore);
+        }
+
+        public double CalculateMinimumFitness()
+        {
+            return Chromosomes.Min(t => t.FitnessScore);
         }
 
         /// <summary>
