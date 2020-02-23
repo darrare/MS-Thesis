@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Diagnostics;
 
-namespace MapColoring
+namespace MapColoring_Improved
 {
     public class Graph
     {
@@ -16,7 +16,7 @@ namespace MapColoring
         public static List<Color> colorOrder = new List<Color>() { Color.Red, Color.Blue, Color.Green, Color.Yellow };
 
         public List<Node> Nodes { get; set; } = new List<Node>();
-        const double UNCOMFORTABLE_DISTANCE_IN_PERCENTAGE = .05; //within 5% distance compared to top left to bottom right of image
+        const double UNCOMFORTABLE_DISTANCE_IN_PERCENTAGE = .03; //within 5% distance compared to top left to bottom right of image
         public List<Edge> Edges;
 
         public Graph validGraph;
@@ -95,7 +95,7 @@ namespace MapColoring
             //Separate any agreed neighbors and non-agreed neighbors
             Dictionary<Node, List<Node>> commonDecisionNeighbors = new Dictionary<Node, List<Node>>();
             Dictionary<Node, List<Node>> disagreeNeighbors = new Dictionary<Node, List<Node>>();
-            foreach(Node node in Nodes)
+            foreach (Node node in Nodes)
             {
                 commonDecisionNeighbors.Add(node, new List<Node>());
                 disagreeNeighbors.Add(node, new List<Node>());
@@ -131,7 +131,7 @@ namespace MapColoring
                     {
                         List<Node> toAdd = canAdd.Take(countNeededToFix).ToList();
                         commonDecisionNeighbors[top.Key].AddRange(toAdd);
-                        foreach(Node node in toAdd)
+                        foreach (Node node in toAdd)
                             commonDecisionNeighbors[node].Add(top.Key);
                     }
                     else
@@ -156,7 +156,7 @@ namespace MapColoring
                 //Sort candiates by distance and takes the number needed to fix the unhappy node
                 candidates = candidates.OrderBy(t => t.Distance(unhappyNodes[i])).Take(countNeededToFix).ToList();
 
-                foreach(Node node in candidates)
+                foreach (Node node in candidates)
                 {
                     commonDecisionNeighbors[unhappyNodes[i]].Add(node);
                     commonDecisionNeighbors[node].Add(unhappyNodes[i]);
@@ -192,6 +192,162 @@ namespace MapColoring
             }
         }
 
+        /// <summary>
+        /// Constructor for the graph that doesn't use a density, instead randomly chooses a value between minEdges and maxEdges
+        /// </summary>
+        /// <param name="numNodes"></param>
+        /// <param name="minEdgesPerNode"></param>
+        /// <param name="maxEdgesPerNode"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="rand"></param>
+        public Graph(int numNodes, int minEdgesPerNode, int maxEdgesPerNode, int width, int height, Random rand)
+        {
+            //Create all the nodes at random locations
+            for (int i = 0; i < numNodes; i++)
+            {
+                Nodes.Add(new Node(rand.Next(0, width - 10), rand.Next(0, height - 10), width, height));
+            }
+
+            double uncomfortableDistance = Math.Sqrt(Math.Pow(width, 2) + Math.Pow(height, 2)) * UNCOMFORTABLE_DISTANCE_IN_PERCENTAGE;
+            double distanceToMove = uncomfortableDistance * .5; //half of the uncomfortable distance for now
+            bool isComfortable = true;
+            do
+            {
+                isComfortable = true;
+                for (int i = 0; i < Nodes.Count - 1; i++)
+                {
+                    for (int j = i + 1; j < Nodes.Count; j++)
+                    {
+                        if (Nodes[i].Distance(Nodes[j]) <= uncomfortableDistance)
+                        {
+                            isComfortable = false;
+                            Nodes[i].MoveAwayFrom(Nodes[j], distanceToMove);
+                            Nodes[j].MoveAwayFrom(Nodes[i], distanceToMove);
+                        }
+                    }
+                }
+            } while (!isComfortable);
+
+            //At this point the graph has all the nodes that are spaced nicely. Time to add neighbors.
+
+            //Find out all the neighbors each node wants (for itself)
+            Dictionary<Node, List<Node>> desiredNeighbors = new Dictionary<Node, List<Node>>();
+            for (int i = 0; i < Nodes.Count; i++)
+            {
+                int numNeighborsToAdd = rand.Next(minEdgesPerNode, maxEdgesPerNode + 1);
+                List<Node> sortedByDistance = Nodes.OrderBy(t => t.Distance(Nodes[i])).ToList();
+                sortedByDistance.RemoveAt(0); //Remove self
+                desiredNeighbors[Nodes[i]] = sortedByDistance.Take(numNeighborsToAdd).ToList();
+            }
+
+            //Separate any agreed neighbors and non-agreed neighbors
+            Dictionary<Node, List<Node>> commonDecisionNeighbors = new Dictionary<Node, List<Node>>();
+            Dictionary<Node, List<Node>> disagreeNeighbors = new Dictionary<Node, List<Node>>();
+            foreach (Node node in Nodes)
+            {
+                commonDecisionNeighbors.Add(node, new List<Node>());
+                disagreeNeighbors.Add(node, new List<Node>());
+            }
+
+            foreach (var top in desiredNeighbors)
+            {
+                foreach (var other in top.Value)
+                {
+                    if (desiredNeighbors[other].Contains(top.Key))
+                    {
+                        if (!commonDecisionNeighbors[top.Key].Contains(other))
+                            commonDecisionNeighbors[top.Key].Add(other);
+                        if (!commonDecisionNeighbors[other].Contains(top.Key))
+                            commonDecisionNeighbors[other].Add(top.Key);
+                    }
+                    else
+                        disagreeNeighbors[top.Key].Add(other);
+                }
+            }
+
+            //unhappy nodes are nodes that cannot be valid with neighbors they want to be, so they have to be neighbors with others.
+            List<Node> unhappyNodes = new List<Node>();
+            //if any node is invalid, go through disagree neighbors and force it to make it valid.
+            foreach (var top in disagreeNeighbors)
+            {
+                //Invalid node, lets take some of the disagree neighbors to fix.
+                if (commonDecisionNeighbors[top.Key].Count < minEdgesPerNode)
+                {
+                    int countNeededToFix = minEdgesPerNode - commonDecisionNeighbors[top.Key].Count;
+                    List<Node> canAdd = disagreeNeighbors[top.Key].Where(t => commonDecisionNeighbors[t].Count < maxEdgesPerNode).ToList();
+                    if (canAdd.Count >= countNeededToFix)
+                    {
+                        List<Node> toAdd = canAdd.Take(countNeededToFix).ToList();
+                        commonDecisionNeighbors[top.Key].AddRange(toAdd);
+                        foreach (Node node in toAdd)
+                            commonDecisionNeighbors[node].Add(top.Key);
+                    }
+                    else
+                    {
+                        unhappyNodes.Add(top.Key);
+                    }
+                }
+            }
+
+            for (int i = 0; i < unhappyNodes.Count; i++)
+            {
+                int countNeededToFix = minEdgesPerNode - commonDecisionNeighbors[unhappyNodes[i]].Count;
+                if (countNeededToFix <= 0)
+                    continue; //Possibly fixed from a previous iteration of i
+
+                //Cant add neighbors that are already added.
+                List<Node> candidates = Nodes.Where(t => !commonDecisionNeighbors[unhappyNodes[i]].Contains(t) && commonDecisionNeighbors[t].Count < maxEdgesPerNode).ToList();
+
+                if (candidates.Count < countNeededToFix)
+                    throw new Exception("Impossible graph setup. Try different variables.");
+
+                //Sort candiates by distance and takes the number needed to fix the unhappy node
+                candidates = candidates.OrderBy(t => t.Distance(unhappyNodes[i])).Take(countNeededToFix).ToList();
+
+                foreach (Node node in candidates)
+                {
+                    commonDecisionNeighbors[unhappyNodes[i]].Add(node);
+                    commonDecisionNeighbors[node].Add(unhappyNodes[i]);
+                }
+            }
+
+            //Last double check to make sure they agree
+            foreach (var top in commonDecisionNeighbors)
+            {
+                if (top.Value.Count < minEdgesPerNode || top.Value.Count > maxEdgesPerNode)
+                    throw new Exception("Some node has too many or too few neighbors.");
+                foreach (var other in top.Value)
+                {
+                    if (!commonDecisionNeighbors[other].Contains(top.Key))
+                        throw new Exception("commonDecisionNeighbors doesn't agree with itself... Something bad in the algorithm");
+                }
+            }
+
+            //Build edges between nodes based on commonDecisionNeighbors
+            List<Node> alreadyHandled = new List<Node>();
+            foreach (var top in commonDecisionNeighbors)
+            {
+                alreadyHandled.Add(top.Key);
+                foreach (var other in top.Value)
+                {
+                    if (!alreadyHandled.Contains(other))
+                    {
+                        Edge edge = new Edge(top.Key, other);
+                        top.Key.Neighbors.Add(edge);
+                        other.Neighbors.Add(edge);
+                    }
+                }
+            }
+
+            //Final final check
+            foreach (Node node in Nodes)
+            {
+                if (node.Neighbors.Count < minEdgesPerNode || node.Neighbors.Count > maxEdgesPerNode)
+                    throw new Exception("Some node has too many or too few neighbors.");
+            }
+        }
+
         public List<Edge> GetAllEdges()
         {
             if (Edges == null)
@@ -211,24 +367,18 @@ namespace MapColoring
             return Edges?.Count ?? GetAllEdges().Count;
         }
 
-        /****************************************************************************************************/
+        //****************************************************************************************************
         //The following functions are used in calculating the graph heuristic.
         //The graph heuristic prioritizes the order in which we advance the graphs.
-        /****************************************************************************************************/
+        //****************************************************************************************************
 
         /// <summary>
-        /// This should run the algorithm to find a solution. The fitness score should be the time it takes to finish.
+        /// Fitness algorithm for the graph.
+        /// A low value is best
         /// </summary>
-        /// <param name="totalColorWeight"></param>
-        /// <param name="coloredWeight"></param>
-        /// <param name="numEdgesNeighboringBlackWeight"></param>
-        /// <returns></returns>
-        public double Fitness(double totalColorWeight, double coloredWeight, double numEdgesNeighboringBlackWeight)
+        public double Fitness()
         {
-            double tccw = totalColorWeight * GetTotalColorCount();
-            double ucw = coloredWeight * GetColoredCount();
-            double nenbw = numEdgesNeighboringBlackWeight * GetNumEdgesNeighboringBlack();
-            return tccw + ucw + nenbw;
+            return Nodes.Count - GetColoredCount();
         }
 
         /// <summary>
@@ -236,23 +386,28 @@ namespace MapColoring
         /// </summary>
         public double Solve(double[] genes)
         {
-            //Stopwatch timer = new Stopwatch();
-            //timer.Start();
-
             SortedList<double, Graph> toSearch = new SortedList<double, Graph>();
-            toSearch.Add(this.Fitness((double)genes[0], (double)genes[1], (double)genes[2]), new Graph(this));
+            toSearch.Add(this.Fitness(), new Graph(this));
 
-            //Store the maximum degree of the nodes in this graph for future use
+            //Store the minimum and maximum degree of the nodes in this graph for future use
+            double minDegreeNode = this.Nodes.Min(t => t.GetNodeDegree());
             double maxDegreeNode = this.Nodes.Max(t => t.GetNodeDegree());
+            double minColoredDegreeNode;
+            double maxColoredDegreeNode;
 
             bool foundResult = false;
             int count = 0;
             while (toSearch.Any())
             {
                 count++;
-                Graph curGraph = toSearch.Pop(); //Take the most efficient graph according to the heuristic
+                Graph curGraph = toSearch.Dequeue(); //Take the most efficient graph according to the heuristic
+                                                     
+                minColoredDegreeNode = curGraph.Nodes.Min(t => t.GetColoredNodeDegree());
+                maxColoredDegreeNode = curGraph.Nodes.Max(t => t.GetColoredNodeDegree());
+
                 //Find the most valuable nodes to check in curGraph
-                List<Node> priorityNodes = curGraph.Nodes.OrderByDescending(t => t.Fitness((double)genes[3], (double)genes[4], maxDegreeNode)).Take(2).ToList();
+                List<Node> priorityNodes = curGraph.Nodes.Select(t => new Tuple<double, Node>(t.Fitness((double)genes[0], (double)genes[1], (double)genes[2], (double)genes[3], minColoredDegreeNode, maxColoredDegreeNode), t)).Where(t => t.Item1 != -1).OrderByDescending(t => t.Item1).Select(t => t.Item2).ToList();
+
                 //Get the index of the priority nodes
                 List<int> priorityNodeIndexes = priorityNodes.Select(t => curGraph.Nodes.IndexOf(t)).ToList();
 
@@ -264,7 +419,7 @@ namespace MapColoring
                     if (result == null)
                     {
                         //The result is trying to use more than 4 colors. Don't add this to the search list
-                        break;
+                        continue;
                     }
 
                     if (result.Value)
@@ -277,7 +432,7 @@ namespace MapColoring
                             validGraph = new Graph(newGraph);
                         break;
                     }
-                    toSearch.SafeAdd(newGraph.Fitness((double)genes[0], (double)genes[1], (double)genes[2]), newGraph);
+                    toSearch.SafeAdd(newGraph.Fitness(), newGraph);
                 }
                 //No sense continuing if we have found the result. Note, this result is required to use <= 4 colors.
                 if (foundResult)
@@ -289,9 +444,28 @@ namespace MapColoring
             if (!foundResult)
                 throw new Exception("There is always a result.");
 
-            //timer.Stop();
             return count;
-            //return timer.ElapsedTicks; //inverted fitness, lower is better
+        }
+
+        /// <summary>
+        /// Exhaustively solves the Graph recursively, returning the collection of every single possible outcome with the given colors
+        /// </summary>
+        /// <returns></returns>
+        public List<Graph> ExhaustiveSolve(Color[] possibleColors)
+        {
+            List<Graph> results = new List<Graph>();
+            foreach (var node in Nodes)
+            {
+                if (node.Color != Color.Black)
+                    continue;
+                foreach (var color in possibleColors)
+                {
+                    Graph newGraph = new Graph(this);
+                    newGraph.Nodes[Nodes.IndexOf(node)].Color = color;
+                    results.AddRange(newGraph.ExhaustiveSolve(possibleColors));
+                }
+            }
+            return results;
         }
 
         /// <summary>
@@ -336,7 +510,7 @@ namespace MapColoring
                 //If satisfies theorem https://en.wikipedia.org/wiki/Four_color_theorem
                 if (GetTotalColorCount() <= 4)
                 {
-                    //If no two neighbors have the same color
+                    //If no two neighbors have the same color and no node has 0 available colors
                     if (InDepthValidate())
                     {
                         return true;
@@ -361,6 +535,11 @@ namespace MapColoring
                 if (edge.Nodes[0].Color == edge.Nodes[1].Color)
                     return false;
             }
+            foreach (var node in Nodes)
+            {
+                if (node.GetPossibleColorCount() == 0)
+                    return false;
+            }
             return true;
         }
 
@@ -382,7 +561,7 @@ namespace MapColoring
         /// A high number here likely means total color count is going to go up for this graph.
         /// Example: all nodes but 1 are colored, but it has 8 edges connected to it. Very high chance it is going to have to be a new color.
         /// </summary>
-        public double GetNumEdgesNeighboringBlack() => GetAllEdges().Where(t => t.IsNeighboringBlack()).Count();
+        public double GetNumEdgesNeighboringBlack() => GetAllEdges().Where(t => t.IsNeighboringTwoBlacks()).Count();
     }
 
     public class Node
@@ -445,33 +624,53 @@ namespace MapColoring
         /****************************************************************************************************/
 
         /// <summary>
-        /// Gets the fitness of the given node to compare against other nodes in the graph
+        /// Can use this fitness algorithm because we are using a balanced genetic algorithm
         /// </summary>
-        /// <param name="uncoloredNeighborWeight">Weight determined by heuristic for uncolored neighbor interest</param>
-        /// <param name="nodeDegreeWeight">Weight determined by heuristic for node degree interest</param>
-        /// <param name="maxDegreeNode">The node with the highest degree's degree</param>
-        /// <returns>The fitness</returns>
-        public double Fitness(double uncoloredNeighborWeight, double nodeDegreeWeight, double maxDegreeNode)
+        /// <param name="targetHighDegree"></param>
+        /// <param name="targetLowDegree"></param>
+        /// <param name="targetHighColoredDegree"></param>
+        /// <param name="targetLowColoredDegree"></param>
+        /// <param name="targetHighPossibleColors"></param>
+        /// <param name="targetLowPossibleColors"></param>
+        /// <param name="minDegreeNode"></param>
+        /// <param name="maxDegreeNode"></param>
+        /// <param name="minDegreeColoredNode"></param>
+        /// <param name="maxDegreeColoredNode"></param>
+        /// <returns></returns>
+        public double Fitness(
+            double targetHighColoredDegree, double targetLowColoredDegree,
+            double targetHighPossibleColors, double targetLowPossibleColors,
+            double minDegreeColoredNode, double maxDegreeColoredNode) //Yolo keeping them as doubles to avoid having to cast later. Prob could make float for more efficiency but oh well
         {
-            //If this node has already been colored. We need not consider it.
-            if (this.Color != Color.Black)
-                return 0;
-            double unw = ((uncoloredNeighborWeight * GetUncoloredNeighborCount()) * maxDegreeNode) / GetNodeDegree(); //normalized with maxDegreeNode
-            double ndw = ((nodeDegreeWeight * GetNodeDegree()) * maxDegreeNode) / GetNodeDegree();//normalized with maxDegreeNode
-            return unw + ndw;
+            //If already colored, we don't want to consider this node
+            if (Color != Color.Black || GetPossibleColorCount() == 0)
+                return -1;
+
+            double thcd = targetHighColoredDegree * ((GetColoredNodeDegree() - minDegreeColoredNode) / (maxDegreeColoredNode - minDegreeColoredNode));
+            double tlcd = targetLowColoredDegree * (1 -((GetColoredNodeDegree() - minDegreeColoredNode) / (maxDegreeColoredNode - minDegreeColoredNode)));
+            double thpc = targetHighPossibleColors * (GetPossibleColorCount() / 4);
+            double tlpc = targetLowPossibleColors * (1 - (GetPossibleColorCount() / 4));
+            return thcd + tlcd + thpc + tlpc;
         }
 
         /// <summary>
         /// Number of uncolored neighbors. Lower the better
         /// If this is 0, then we know exactly what colors this node cannot be
         /// </summary>
-        public double GetUncoloredNeighborCount() => Neighbors.Where(t => t.GetNeighbor(this).Color == Color.Black).Count();
+        public double GetBlackNodeDegree() => Neighbors.Where(t => t.GetNeighbor(this).Color == Color.Black).Count();
+
+        public double GetColoredNodeDegree() => Neighbors.Where(t => t.GetNeighbor(this).Color != Color.Black).Count();
 
         /// <summary>
         /// The number of neighbors this node has
         /// Generally you want to color high degrees first
         /// </summary>
         public double GetNodeDegree() => Neighbors.Count();
+
+        /// <summary>
+        /// Gets the possible colors for this node
+        /// </summary>
+        public double GetPossibleColorCount() => Graph.colorOrder.Count(t => !Neighbors.Any(n => n.GetNeighbor(this).Color == t));
     }
 
     /// <summary>
@@ -480,7 +679,7 @@ namespace MapColoring
     public class Edge : IEqualityComparer<Edge>
     {
         public Node[] Nodes { get; set; } = new Node[2];
-        
+
         public Edge(Node first, Node second)
         {
             Nodes[0] = first;
@@ -509,15 +708,28 @@ namespace MapColoring
         }
 
         /// <summary>
-        /// Should we alter to only consider if it is not double black?
+        /// Returns true iff both neighbors are black
         /// </summary>
-        public bool IsNeighboringBlack()
+        public bool IsNeighboringTwoBlacks()
         {
-            if (Nodes[0].Color == Color.Black)
-                return true;
-            if (Nodes[1].Color == Color.Black)
-                return true;
-            return false;
+            return Nodes[0].Color == Color.Black && Nodes[1].Color == Color.Black;
+        }
+
+        /// <summary>
+        /// Returns true iff only one neighbor is black
+        /// </summary>
+        public bool IsNeighboringOneBlack()
+        {
+            return (Nodes[0].Color == Color.Black && Nodes[1].Color != Color.Black)
+                || (Nodes[0].Color != Color.Black && Nodes[1].Color == Color.Black);
+        }
+
+        /// <summary>
+        /// Returns true iff neither neighbor is black
+        /// </summary>
+        public bool IsNeighboringNoBlacks()
+        {
+            return Nodes[0].Color != Color.Black && Nodes[1].Color != Color.Black;
         }
     }
 

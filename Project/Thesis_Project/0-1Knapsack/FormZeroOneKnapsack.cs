@@ -180,14 +180,15 @@ namespace _0_1Knapsack
                 return GeneticAlgorithm.GeneticAlgorithmClass.RunGeneticAlgorithm(
                    int.Parse(TxtBx_PopulationSize.Text),
                    double.Parse(TxtBx_Convergence.Text),
-                   new object[] { double.Parse(TxtBx_DefaultGeneValue.Text), double.Parse(TxtBx_DefaultGeneValue.Text), double.Parse(TxtBx_DefaultGeneValue.Text), double.Parse(TxtBx_DefaultGeneValue.Text) },
+                   new double[] { double.Parse(TxtBx_DefaultGeneValue.Text), double.Parse(TxtBx_DefaultGeneValue.Text), double.Parse(TxtBx_DefaultGeneValue.Text), double.Parse(TxtBx_DefaultGeneValue.Text) },
                    double.Parse(TxtBx_PercentChromosomesMutated.Text),
                    double.Parse(TxtBx_PercentGenesMutated.Text),
                    double.Parse(TxtBx_PercentMutationDeviation.Text),
                    knapsack.Fitness,
                    int.Parse(TxtBx_MaxIterations.Text),
                    logInterval,
-                   true);
+                   true,
+                   string.IsNullOrEmpty(TxtBx_Seed.Text) ? 0 : int.Parse(TxtBx_Seed.Text));
             });
 
             Btn_RandomizeParameters.Enabled = true;
@@ -196,8 +197,14 @@ namespace _0_1Knapsack
             //handle chromosomes in results data grid view
             GenerateResultsDataGridView(knapsack.GetKnapsackSolutionsFromGenes(chromosomes.Select(t => t.Genes).ToList()), knapsack.Items.ToList());
             Common.FormResults form = new Common.FormResults();
-            form.InitializeChart(dataPoints.Select(t => t.Item1).ToList(), dataPoints.Select(t => t.Item2).ToList(), dataPoints.Select(t => t.Item3).ToList(), dataPoints.Select(t => t.Item4).ToList(), dataPoints.Select(t => t.Item5).ToList(), selectedChromosomesFitness, logInterval);
-            form.Show();
+            if (form.InitializeChart(dataPoints.Select(t => t.Item1).ToList(), dataPoints.Select(t => t.Item2).ToList(), dataPoints.Select(t => t.Item3).ToList(), dataPoints.Select(t => t.Item4).ToList(), dataPoints.Select(t => t.Item5).ToList(), selectedChromosomesFitness, logInterval))
+            {
+                form.Show();
+            }
+            else
+            {
+                MessageBox.Show("Not enough iterations to show results.");
+            }
         }
 
         /// <summary>
@@ -337,7 +344,7 @@ namespace _0_1Knapsack
 
             FormCompareAgainstGreedy form = new FormCompareAgainstGreedy();
             form.Show();
-            form.InstantiateWithExistingData((DataTable)DGV_Results.DataSource, (DataTable)DGV_KnapsackObjects.DataSource, int.Parse(TxtBx_NumberKnapsackObjects.Text));
+            form.InstantiateWithExistingData((DataTable)DGV_Results.DataSource, (DataTable)DGV_KnapsackObjects.DataSource, int.Parse(TxtBx_Capacity.Text));
         }
     }
 }

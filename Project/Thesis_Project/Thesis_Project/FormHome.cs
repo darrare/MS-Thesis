@@ -28,5 +28,17 @@ namespace Thesis_Project
             MapColoring.FormMapColoring form = new MapColoring.FormMapColoring();
             form.Show();
         }
+
+        private void Btn_GraphColoringImproved_Click(object sender, EventArgs e)
+        {
+            MapColoring_Improved.FormMapColoring form = new MapColoring_Improved.FormMapColoring();
+            form.Show();
+        }
+
+        private void Btn_RandomGame_Click(object sender, EventArgs e)
+        {
+            RandomGame.FormRandomGame form = new RandomGame.FormRandomGame();
+            form.Show();
+        }
     }
 }

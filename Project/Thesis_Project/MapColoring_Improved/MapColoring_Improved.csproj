@@ -4,14 +4,29 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{77401811-E8B5-4052-AECC-B4062AB42720}</ProjectGuid>
+    <ProjectGuid>{F177CF56-7235-4BEA-ABE0-817AC55981FC}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Thesis_Project</RootNamespace>
-    <AssemblyName>Thesis_Project</AssemblyName>
+    <RootNamespace>MapColoring_Improved</RootNamespace>
+    <AssemblyName>MapColoring_Improved</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -35,7 +50,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,16 +61,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FormHome.cs">
+    <Compile Include="Extensions.cs" />
+    <Compile Include="FormSolveGraph.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormHome.Designer.cs">
-      <DependentUpon>FormHome.cs</DependentUpon>
+    <Compile Include="FormSolveGraph.Designer.cs">
+      <DependentUpon>FormSolveGraph.cs</DependentUpon>
     </Compile>
+    <Compile Include="Graph.cs" />
+    <Compile Include="FormMapColoring.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMapColoring.Designer.cs">
+      <DependentUpon>FormMapColoring.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MapColoring.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FormHome.resx">
-      <DependentUpon>FormHome.cs</DependentUpon>
+    <EmbeddedResource Include="FormSolveGraph.resx">
+      <DependentUpon>FormSolveGraph.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormMapColoring.resx">
+      <DependentUpon>FormMapColoring.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -66,6 +92,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -81,22 +108,26 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\0-1Knapsack\0-1Knapsack.csproj">
-      <Project>{da339df2-fb20-4089-8367-046293ee01d3}</Project>
-      <Name>0-1Knapsack</Name>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{d5bf308d-c0c6-4fbd-bdb6-6240b80c2f46}</Project>
+      <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MapColoring\MapColoring.csproj">
-      <Project>{901bb3f6-dab8-4f0b-b9de-b83e2138a2e2}</Project>
-      <Name>MapColoring</Name>
+    <ProjectReference Include="..\GeneticAlgorithm\GeneticAlgorithm.csproj">
+      <Project>{5d166d4c-f9d4-42d4-bac3-70454c2ac185}</Project>
+      <Name>GeneticAlgorithm</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MapColoring_Improved\MapColoring_Improved.csproj">
-      <Project>{f177cf56-7235-4bea-abe0-817ac55981fc}</Project>
-      <Name>MapColoring_Improved</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RandomGame\RandomGame.csproj">
-      <Project>{3c6282f4-e359-43aa-85fd-197e8344d7c3}</Project>
-      <Name>RandomGame</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

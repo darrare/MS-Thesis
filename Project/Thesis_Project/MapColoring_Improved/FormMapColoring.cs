@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
-namespace MapColoring
+namespace MapColoring_Improved
 {
     public partial class FormMapColoring : Form
     {
@@ -59,11 +59,11 @@ namespace MapColoring
             }
 
             //Load the previous runs values into the fields
-            if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"/StoredVariables/MapColoring/MostRecentRun.rd"))
+            if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"/StoredVariables/MapColoring_Improved/MostRecentRun.rd"))
             {
                 try
                 {
-                    using (StreamReader sr = new StreamReader(AppDomain.CurrentDomain.BaseDirectory + @"/StoredVariables/MapColoring/MostRecentRun.rd"))
+                    using (StreamReader sr = new StreamReader(AppDomain.CurrentDomain.BaseDirectory + @"/StoredVariables/MapColoring_Improved/MostRecentRun.rd"))
                     {
                         TxtBx_NumCountries.Text = sr.ReadLine();
                         TxtBx_EdgeDensity.Text = sr.ReadLine();
@@ -170,7 +170,7 @@ namespace MapColoring
                 return;
 
             //Save our current parameters to be spawned next time we run the program
-            string destination = AppDomain.CurrentDomain.BaseDirectory + @"/StoredVariables/MapColoring";
+            string destination = AppDomain.CurrentDomain.BaseDirectory + @"/StoredVariables/MapColoring_Improved";
             if (!Directory.Exists(destination))
                 Directory.CreateDirectory(destination);
 
@@ -293,7 +293,13 @@ namespace MapColoring
                 return GeneticAlgorithm.GeneticAlgorithmClass.RunGeneticAlgorithm(
                    int.Parse(TxtBx_PopulationSize.Text),
                    double.Parse(TxtBx_Convergence.Text),
-                   new double[] { double.Parse(TxtBx_DefaultGeneValue.Text), double.Parse(TxtBx_DefaultGeneValue.Text), double.Parse(TxtBx_DefaultGeneValue.Text), double.Parse(TxtBx_DefaultGeneValue.Text), double.Parse(TxtBx_DefaultGeneValue.Text) },
+                   new double[] 
+                   { 
+                       double.Parse(TxtBx_DefaultGeneValue.Text), 
+                       double.Parse(TxtBx_DefaultGeneValue.Text),
+                       double.Parse(TxtBx_DefaultGeneValue.Text),
+                       double.Parse(TxtBx_DefaultGeneValue.Text),
+                   },
                    double.Parse(TxtBx_PercentChromosomesMutated.Text),
                    double.Parse(TxtBx_PercentGenesMutated.Text),
                    double.Parse(TxtBx_PercentMutationDeviation.Text),
@@ -329,11 +335,10 @@ namespace MapColoring
             DataTable table = new DataTable("Final Evolution");
             table.Columns.Add("id");
             table.Columns.Add("Duration");
-            table.Columns.Add("Total Color Count Gene");
-            table.Columns.Add("Colored Nodes Gene");
-            table.Columns.Add("Num Edges Neighboring Black Gene");
-            table.Columns.Add("Uncolored Neighbor Count Gene");
-            table.Columns.Add("Node Degree Gene");
+            table.Columns.Add("Target High Colored Degree");
+            table.Columns.Add("Target Low Colored Degree");
+            table.Columns.Add("Target High Possible Colors");
+            table.Columns.Add("Target Low Possible Colors");
 
             List<List<double>> genes = new List<List<double>>();
             solutions.ForEach(t => genes.Add(t.Genes.Select(x => (double)x / (double)t.Genes.Max()).ToList()));
@@ -343,19 +348,16 @@ namespace MapColoring
                 genes.Average(t => (double)t[0]),
                 genes.Average(t => (double)t[1]),
                 genes.Average(t => (double)t[2]),
-                genes.Average(t => (double)t[3]),
-                genes.Average(t => (double)t[4])});
+                genes.Average(t => (double)t[3])});
 
             for (int i = 0; i < solutions.Count; i++)
             {
-                double[] normalizedGenes = solutions[i].Genes.Select(t => (double)t / (double)solutions[i].Genes.Max()).ToArray();
                 table.Rows.Add(new object[] { i + 1,
                     solutions[i].FitnessScore,
-                    normalizedGenes[0].ToString("#.###"),
-                    normalizedGenes[1].ToString("#.###"),
-                    normalizedGenes[2].ToString("#.###"),
-                    normalizedGenes[3].ToString("#.###"),
-                    normalizedGenes[4].ToString("#.###")
+                    solutions[i].Genes[0].ToString("#.###"),
+                    solutions[i].Genes[1].ToString("#.###"),
+                    solutions[i].Genes[2].ToString("#.###"),
+                    solutions[i].Genes[3].ToString("#.###")
                 });
             }
 

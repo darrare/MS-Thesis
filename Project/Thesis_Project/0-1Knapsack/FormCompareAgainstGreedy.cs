@@ -27,7 +27,7 @@ namespace _0_1Knapsack
             DGV_KnapsackObjects.DataSource = knapsackObjects;
             items = knapsackObjects.AsEnumerable().Select(t => new KnapsackItem() { Weight = double.Parse((string)t[1]), Value = double.Parse((string)t[2]) }).ToList();
             this.capacity = capacity;
-            TxtBx_GreedyAlgorithmMaximumValue.Text = GreedyAlgorithm(items, capacity).ToString("#.###");
+            TxtBx_GreedyAlgorithmMaximumValue.Text = GreedyAlgorithm(items, capacity).ToString("#.#####");
         }
 
         private double GreedyAlgorithm(List<KnapsackItem> items, int capacity)
@@ -36,8 +36,8 @@ namespace _0_1Knapsack
             double valueSum = 0;
             foreach (KnapsackItem item in items.OrderBy(t => t.Value / t.Weight).Reverse())
             {
-                if (weightSum + item.Weight > 300)
-                    break;
+                if (weightSum + item.Weight > capacity)
+                    continue;
 
                 weightSum += item.Weight;
                 valueSum += item.Value;
@@ -63,7 +63,7 @@ namespace _0_1Knapsack
                 }
             }
 
-            TxtBx_TotalValue.Text = inBag.Sum(t => t.Value).ToString("#.###");
+            TxtBx_TotalValue.Text = inBag.Sum(t => t.Value).ToString("#.#####");
         }
     }
 }

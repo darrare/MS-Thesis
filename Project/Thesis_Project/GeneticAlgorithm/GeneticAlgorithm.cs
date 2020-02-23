@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GeneticAlgorithm
 {
-    public delegate double FitnessAlgorithm(object[] genes);
+    public delegate double FitnessAlgorithm(double[] genes);
 
     public static class GeneticAlgorithmClass
     {
@@ -30,21 +30,24 @@ namespace GeneticAlgorithm
         /// <para/>1 means the mutation will range from 0-double whatever the genes value was</param>
         /// <param name="fitnessAlgorithm">The algorithm provided by the CSP to determine the success of the chromosome</param>
         /// <param name="maxIterationCount">Maximum number of evolutions. Prevents algorithm from running forever when fitness scores won't converge. Default is infinite</param>
+        /// <param name="isHigherFitnessBetter">Determines how to order the results.</param>
+        /// <param name="seed">random seed</param>
         /// <returns>List of chromosomes that was the last set before a convergence was found, ordered from highest to lowest</returns>
         public static List<Chromosome> RunGeneticAlgorithm(
             int populationSize,
             double maxConvergenceDeviationToAccept,
-            object[] defaultGenes,
+            double[] defaultGenes,
             double chanceToSelectEachChromosome,
             double chanceToMutateEachGene,
             double maxGeneMutationDeviation,
             FitnessAlgorithm fitnessAlgorithm,
             int maxIterationCount,
             int logInterval = 5,
-            bool isHigherFitnessBetter = true)
+            bool isHigherFitnessBetter = true,
+            int seed = 0)
         {
             //Creates a new population, automatically mutates each gene by up to maxGeneMutationDeviation
-            Population pop = new Population(populationSize, defaultGenes, maxGeneMutationDeviation, isHigherFitnessBetter);
+            Population pop = new Population(populationSize, defaultGenes, maxGeneMutationDeviation, isHigherFitnessBetter, seed);
 
             double convergence = 0;
             double averageFitness = 0;

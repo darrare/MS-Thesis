@@ -1,4 +1,4 @@
-﻿namespace MapColoring
+﻿namespace MapColoring_Improved
 {
     partial class FormMapColoring
     {
@@ -334,7 +334,7 @@
             this.PictureBox_Graph.BackColor = System.Drawing.Color.White;
             this.PictureBox_Graph.Location = new System.Drawing.Point(485, 13);
             this.PictureBox_Graph.Name = "PictureBox_Graph";
-            this.PictureBox_Graph.Size = new System.Drawing.Size(531, 420);
+            this.PictureBox_Graph.Size = new System.Drawing.Size(910, 778);
             this.PictureBox_Graph.TabIndex = 31;
             this.PictureBox_Graph.TabStop = false;
             // 
@@ -361,7 +361,7 @@
             // LBL_Iteration
             // 
             this.LBL_Iteration.AutoSize = true;
-            this.LBL_Iteration.Location = new System.Drawing.Point(86, 482);
+            this.LBL_Iteration.Location = new System.Drawing.Point(92, 840);
             this.LBL_Iteration.Name = "LBL_Iteration";
             this.LBL_Iteration.Size = new System.Drawing.Size(13, 13);
             this.LBL_Iteration.TabIndex = 38;
@@ -370,7 +370,7 @@
             // LBL_Convergence
             // 
             this.LBL_Convergence.AutoSize = true;
-            this.LBL_Convergence.Location = new System.Drawing.Point(86, 469);
+            this.LBL_Convergence.Location = new System.Drawing.Point(92, 827);
             this.LBL_Convergence.Name = "LBL_Convergence";
             this.LBL_Convergence.Size = new System.Drawing.Size(13, 13);
             this.LBL_Convergence.TabIndex = 37;
@@ -379,7 +379,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 482);
+            this.label1.Location = new System.Drawing.Point(15, 840);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(45, 13);
             this.label1.TabIndex = 36;
@@ -388,7 +388,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 469);
+            this.label2.Location = new System.Drawing.Point(15, 827);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(71, 13);
             this.label2.TabIndex = 35;
@@ -396,7 +396,7 @@
             // 
             // PB_MapColoring
             // 
-            this.PB_MapColoring.Location = new System.Drawing.Point(12, 439);
+            this.PB_MapColoring.Location = new System.Drawing.Point(18, 797);
             this.PB_MapColoring.Name = "PB_MapColoring";
             this.PB_MapColoring.Size = new System.Drawing.Size(1004, 23);
             this.PB_MapColoring.TabIndex = 34;
@@ -406,7 +406,7 @@
             this.groupBox2.Controls.Add(this.DGV_Results);
             this.groupBox2.Location = new System.Drawing.Point(12, 205);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(467, 228);
+            this.groupBox2.Size = new System.Drawing.Size(467, 586);
             this.groupBox2.TabIndex = 39;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Results";
@@ -416,14 +416,14 @@
             this.DGV_Results.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DGV_Results.Location = new System.Drawing.Point(6, 19);
             this.DGV_Results.Name = "DGV_Results";
-            this.DGV_Results.Size = new System.Drawing.Size(454, 203);
+            this.DGV_Results.Size = new System.Drawing.Size(454, 561);
             this.DGV_Results.TabIndex = 0;
             // 
             // FormMapColoring
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1028, 501);
+            this.ClientSize = new System.Drawing.Size(1407, 867);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.LBL_Iteration);
             this.Controls.Add(this.LBL_Convergence);

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 
-namespace MapColoring
+namespace MapColoring_Improved
 {
     class MapColoring
     {

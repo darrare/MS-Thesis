@@ -30,7 +30,7 @@ namespace GeneticAlgorithm
         /// <param name="maxDerivation">Percentage wise, how much can we deviate from the default genes values</param>
         /// <param name="isHigherFitnessBetter">(OPTIONAL) Is a higher fitness score better than a lower fitness score?</param>
         /// <param name="seed">(OPTIONAL) Seed for randomization to get same results</param>
-        public Population(int populationSize, object[] defaultGenes, double maxDerivation, bool isHigherFitnessBetter = true, int seed = 0)
+        public Population(int populationSize, double[] defaultGenes, double maxDerivation, bool isHigherFitnessBetter = true, int seed = 0)
         {
             if (seed != 0)
                 Rand = new Random(seed);
@@ -47,26 +47,14 @@ namespace GeneticAlgorithm
         /// </summary>
         /// <param name="defaultGenes">The set of default genes for the first generation</param>
         /// <param name="maxDerivation">Percentage wise, how much can we deviate from the default genes values</param>
-        private void GenerateFirstGeneration(object[] defaultGenes, double maxDerivation)
+        private void GenerateFirstGeneration(double[] defaultGenes, double maxDerivation)
         {
             for (int i = 0; i < PopulationSize; i++)
             {
-                object[] newGenes = new object[GeneCount];
+                double[] newGenes = new double[GeneCount];
                 for (int j = 0; j < GeneCount; j++)
                 {
-                    newGenes[j] = defaultGenes[j];
-                    //Mutate gene based on type.
-                    if (newGenes[j] is double)
-                    {
-                        double val = Convert.ToDouble(newGenes[j]);
-                        newGenes[j] = val + val * ((Rand.NextDouble() * 2) - 1) * maxDerivation;
-                    }
-                    else if (newGenes[j] is int)
-                    {
-                        int val = (int)newGenes[j];
-                        //Floors all rounding errors
-                        newGenes[j] = val + val * ((Rand.NextDouble() * 2) - 1) * maxDerivation;
-                    }
+                    newGenes[j] = defaultGenes[j] + defaultGenes[j] * ((Rand.NextDouble() * 2) - 1) * maxDerivation;
                 }
                 Chromosomes.Add(new Chromosome(newGenes));
             }
@@ -104,17 +92,12 @@ namespace GeneticAlgorithm
         }
 
         /// <summary>
-        /// Calulcates the average fitness of this population from 0-1 where 1 is the highest fitness score of this population and 0 is the lowest.
+        /// Calulcates the average fitness of this population
         /// </summary>
-        /// <returns>The average fitness relative to 0-1</returns>
+        /// <returns>The average fitness</returns>
         public double CalculateAverageFitness()
         {
             return Chromosomes.Average(t => t.FitnessScore);
-            double average = Chromosomes.Average(t => t.FitnessScore);
-            double min = Chromosomes.Min(t => t.FitnessScore);
-            double max = Chromosomes.Max(t => t.FitnessScore);
-
-            return (average - min) / (max - min);
         }
 
         public double CalculateMaximumFitness()
@@ -137,7 +120,7 @@ namespace GeneticAlgorithm
             double max = Chromosomes.Max(t => t.FitnessScore);
             if (min == max)
                 return new List<double>() { max };
-            //return Chromosomes.Select(t => (t.FitnessScore - min) / (max - min)).ToList();
+
             return Chromosomes.Select(t => t.FitnessScore).Distinct().ToList();
         }
 
@@ -176,7 +159,7 @@ namespace GeneticAlgorithm
             {
                 for (int j = i + 1; j < Chromosomes.Count; j++)
                 {
-                    object[] newGenes = new object[GeneCount];
+                    double[] newGenes = new double[GeneCount];
                     for (int x = 0; x < crossoverPoint; x++)
                         newGenes[x] = Chromosomes[i].Genes[x];
                     for (int y = crossoverPoint; y < GeneCount; y++)
@@ -216,21 +199,11 @@ namespace GeneticAlgorithm
                         //Roll the dice to see if we should mutate it
                         if (Rand.NextDouble() <= individualGeneSelectionChance)
                         {
-                            //Mutate gene based on type.
-                            if (c.Genes[i] is double)
-                            {
-                                double val = Convert.ToDouble(c.Genes[i]);
-                                c.Genes[i] = val + val * ((Rand.NextDouble() * 2) - 1) * mutationPercentageMax;
-                            }
-                            else if (c.Genes[i] is int)
-                            {
-                                int val = (int)c.Genes[i];
-                                //Floors all rounding errors
-                                c.Genes[i] = val + val * ((Rand.NextDouble() * 2) - 1) * mutationPercentageMax;
-                            }
+                            c.Genes[i] = c.Genes[i] + c.Genes[i] * ((Rand.NextDouble() * 2) - 1) * mutationPercentageMax;
                         }
                     }
                 }
+                c.Normalize(); //This is what balances the genetic algorithm
             }
         }
 

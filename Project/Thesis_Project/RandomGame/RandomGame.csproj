@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{77401811-E8B5-4052-AECC-B4062AB42720}</ProjectGuid>
+    <ProjectGuid>{3C6282F4-E359-43AA-85FD-197E8344D7C3}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Thesis_Project</RootNamespace>
-    <AssemblyName>Thesis_Project</AssemblyName>
+    <RootNamespace>RandomGame</RootNamespace>
+    <AssemblyName>RandomGame</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -35,7 +35,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,16 +46,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FormHome.cs">
+    <Compile Include="Extensions.cs" />
+    <Compile Include="FormRandomGame.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormHome.Designer.cs">
-      <DependentUpon>FormHome.cs</DependentUpon>
+    <Compile Include="FormRandomGame.Designer.cs">
+      <DependentUpon>FormRandomGame.cs</DependentUpon>
     </Compile>
+    <Compile Include="Graph.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FormHome.resx">
-      <DependentUpon>FormHome.cs</DependentUpon>
+    <EmbeddedResource Include="FormRandomGame.resx">
+      <DependentUpon>FormRandomGame.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -81,21 +82,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\0-1Knapsack\0-1Knapsack.csproj">
-      <Project>{da339df2-fb20-4089-8367-046293ee01d3}</Project>
-      <Name>0-1Knapsack</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MapColoring\MapColoring.csproj">
-      <Project>{901bb3f6-dab8-4f0b-b9de-b83e2138a2e2}</Project>
-      <Name>MapColoring</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MapColoring_Improved\MapColoring_Improved.csproj">
-      <Project>{f177cf56-7235-4bea-abe0-817ac55981fc}</Project>
-      <Name>MapColoring_Improved</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RandomGame\RandomGame.csproj">
-      <Project>{3c6282f4-e359-43aa-85fd-197e8344d7c3}</Project>
-      <Name>RandomGame</Name>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{d5bf308d-c0c6-4fbd-bdb6-6240b80c2f46}</Project>
+      <Name>Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -61,7 +61,7 @@ namespace _0_1Knapsack
         /// [3] = priority of high value (double)
         /// </param>
         /// <returns>The value of the load</returns>
-        public double Fitness(object[] genes)
+        public double Fitness(double[] genes)
         {
             //Use heuristic to sort array such that most wanted items are at the beginning
             List<KnapsackItem> inBag = new List<KnapsackItem>();
@@ -83,10 +83,10 @@ namespace _0_1Knapsack
         /// Generates a list of all solutions based on the converged generation
         /// </summary>
         /// <param name="genes">The converged genes</param>
-        public List<KnapsackSolution> GetKnapsackSolutionsFromGenes(List<object[]> genes)
+        public List<KnapsackSolution> GetKnapsackSolutionsFromGenes(List<double[]> genes)
         {
             List<KnapsackSolution> solutions = new List<KnapsackSolution>();
-            foreach (object[] geneSet in genes)
+            foreach (double[] geneSet in genes)
             {
                 List<KnapsackItem> inBag = new List<KnapsackItem>();
                 foreach (KnapsackItem item in Items.OrderByDescending(item =>
@@ -135,7 +135,7 @@ namespace _0_1Knapsack
         public List<KnapsackItem> Items { get; set; }
         public double TotalWeight { get { return Items.Sum(t => t.Weight); } }
         public double TotalValue { get { return Items.Sum(t => t.Value); } }
-        public object[] Genes { get; set; }
+        public double[] Genes { get; set; }
 
         public bool Equals(KnapsackSolution other)
         {
