@@ -156,9 +156,25 @@ namespace RandomGame
                 results.Add(new Tuple<int, int>(passCount, failCount));
             }
 
-            //We have our results from the constraints on the edges, now time to show some results to the user
+            listViewSatisfiabilityResults.Items.Clear();
 
-            double highestValue = results.Max(t => t.Item1 / (t.Item1 + t.Item2));
+            //We have our results from the constraints on the edges, now time to show some results to the user
+            for(int i = 0; i < results.Count; i++)
+            {
+                double satisfiability = ((double)results[i].Item1 / ((double)results[i].Item1 + (double)results[i].Item2));
+                if (satisfiability >= .8)
+                {
+
+                    listViewSatisfiabilityResults.Items.Add(new ListViewItem(new string[] { i.ToString(), satisfiability.ToString() }));
+                }
+            }
+
+            FormResults fResults = new FormResults();
+            fResults.Show();
+            fResults.Initialize(results);
+
+            //Might want to do something with later
+            //double highestValue = results.Max(t => t.Item1 / (t.Item1 + t.Item2));
         }
 
         //1
@@ -198,10 +214,12 @@ namespace RandomGame
             }
             Pen pen = new Pen(Color.Black);
             Bitmap image = new Bitmap(PictureBox_Graph.Width, PictureBox_Graph.Height);
+            Font font = new Font("Arial", 12);
             Graphics g = Graphics.FromImage(image);
 
             foreach (var edge in graph.Nodes.SelectMany(t => t.Neighbors).Distinct())
             {
+                g.DrawString(graph.Edges.IndexOf(edge).ToString(), font, brushColors[Color.Black], new PointF(((edge.Nodes[0].X + edge.Nodes[1].X) / 2), ((edge.Nodes[0].Y + edge.Nodes[1].Y) / 2)));
                 g.DrawLine(pen, edge.Nodes[0].X, edge.Nodes[0].Y, edge.Nodes[1].X, edge.Nodes[1].Y);
             }
 

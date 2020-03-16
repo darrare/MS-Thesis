@@ -51,6 +51,9 @@
             this.Btn_DrawNext = new System.Windows.Forms.Button();
             this.Label_GraphsCount = new System.Windows.Forms.Label();
             this.TxtBx_EdgeConstraints = new System.Windows.Forms.TextBox();
+            this.listViewSatisfiabilityResults = new System.Windows.Forms.ListView();
+            this.id = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.satisfiability = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox_Graph)).BeginInit();
             this.SuspendLayout();
@@ -264,11 +267,25 @@
             this.TxtBx_EdgeConstraints.Size = new System.Drawing.Size(1297, 275);
             this.TxtBx_EdgeConstraints.TabIndex = 40;
             // 
+            // listViewSatisfiabilityResults
+            // 
+            this.listViewSatisfiabilityResults.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.id,
+            this.satisfiability});
+            this.listViewSatisfiabilityResults.HideSelection = false;
+            this.listViewSatisfiabilityResults.Location = new System.Drawing.Point(648, 12);
+            this.listViewSatisfiabilityResults.Name = "listViewSatisfiabilityResults";
+            this.listViewSatisfiabilityResults.Size = new System.Drawing.Size(661, 416);
+            this.listViewSatisfiabilityResults.TabIndex = 41;
+            this.listViewSatisfiabilityResults.UseCompatibleStateImageBehavior = false;
+            this.listViewSatisfiabilityResults.View = System.Windows.Forms.View.Details;
+            // 
             // FormRandomGame
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1321, 721);
+            this.Controls.Add(this.listViewSatisfiabilityResults);
             this.Controls.Add(this.TxtBx_EdgeConstraints);
             this.Controls.Add(this.Label_GraphsCount);
             this.Controls.Add(this.Btn_DrawNext);
@@ -312,6 +329,9 @@
         private System.Windows.Forms.Button Btn_DrawNext;
         private System.Windows.Forms.Label Label_GraphsCount;
         private System.Windows.Forms.TextBox TxtBx_EdgeConstraints;
+        private System.Windows.Forms.ListView listViewSatisfiabilityResults;
+        private System.Windows.Forms.ColumnHeader id;
+        private System.Windows.Forms.ColumnHeader satisfiability;
     }
 }
 
