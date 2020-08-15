@@ -38,5 +38,10 @@ namespace RandomGame
                 resultsListView.Items.Add(new ListViewItem(new string[] { group.Key.ToString(), group.Count().ToString()}));
             }
         }
+
+        public void InitializeMultipleResults(List<List<Tuple<int, int>>> results)
+        {
+
+        }
     }
 }
