@@ -1,0 +1,3 @@
+A unique game is essentially picking an edge v,w and fixing a label to v which results in w having one, and only one option.
+
+A two-prover one-round game is an instance of a unique game if for every question and every answer by the first player, there is exactly one answer from the second player that results in a win for the players, and vice versa. The value of the game is the maximum winning probability for the players over all strategies.

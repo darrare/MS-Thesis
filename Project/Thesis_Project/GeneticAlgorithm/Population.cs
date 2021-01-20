@@ -190,13 +190,13 @@ namespace GeneticAlgorithm
             //For every chromosome
             foreach (Chromosome c in Chromosomes)
             {
-                //Roll the dice to see if we should mutate it
+                //Roll the dice to see if we should mutate the chromosome
                 if (Rand.NextDouble() <= initialSelectionChance)
                 {
                     //For every gene in chromosome
                     for (int i = 0; i < GeneCount; i++)
                     {
-                        //Roll the dice to see if we should mutate it
+                        //Roll the dice to see if we should mutate the gene
                         if (Rand.NextDouble() <= individualGeneSelectionChance)
                         {
                             c.Genes[i] = c.Genes[i] + c.Genes[i] * ((Rand.NextDouble() * 2) - 1) * mutationPercentageMax;
