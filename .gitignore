@@ -16,7 +16,7 @@
 *.sln.docstates
 
 # Big files
-.mp4
+*.mp4
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
